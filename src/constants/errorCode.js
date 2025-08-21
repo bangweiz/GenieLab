@@ -15,6 +15,16 @@ const ERROR_CODE = {
 		code: "DB_ERROR",
 		message: "Something wrong with DB",
 	},
+	USER_NOT_FOUND: {
+		code: "USER_NOT_FOUND",
+		message: "User not found",
+		statusCode: 404,
+	},
+	INVALID_CREDENTIALS: {
+		code: "INVALID_CREDENTIALS",
+		message: "Invalid credentials",
+		statusCode: 401,
+	},
 };
 
 module.exports = ERROR_CODE;
