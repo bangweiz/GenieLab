@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const Organisation = require("../models/organisation.model.js");
 const User = require("../models/user.model.js");
 const { SALT_RUN } = require("../constants/auth");
+const GenieLabError = require("../utils/GenieLabError");
+const ERROR_CODE = require("../constants/errorCode");
 
 async function createOrganisationAndRootUser({
 	organisationName,
@@ -48,14 +50,20 @@ async function createOrganisationAndRootUser({
 	} catch (error) {
 		await session.abortTransaction();
 		await session.endSession();
-		throw error;
+		throw new GenieLabError(
+			ERROR_CODE.DB_ERROR.code,
+			error.message || ERROR_CODE.DB_ERROR.message,
+		);
 	}
 }
 
 function checkOrganisationNameExists(organisationName) {
 	const organisation = Organisation.findOne({ name: organisationName });
 	if (organisation) {
-		throw Error("The organisation name exists.");
+		throw new GenieLabError(
+			ERROR_CODE.ORG_NAME_EXIST.code,
+			ERROR_CODE.ORG_NAME_EXIST.message,
+		);
 	}
 }
 
