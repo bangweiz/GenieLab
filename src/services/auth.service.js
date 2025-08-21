@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const GenieLabError = require("../utils/GenieLabError");
 const { TOKEN_EXPIRATION } = require("../constants/auth");
@@ -12,7 +12,7 @@ async function login(email, password) {
 			ERROR_CODE.USER_NOT_FOUND.code,
 			ERROR_CODE.USER_NOT_FOUND.message,
 			[],
-			ERROR_CODE.USER_NOT_FOUND.statusCode,
+			404,
 		);
 	}
 
@@ -22,7 +22,7 @@ async function login(email, password) {
 			ERROR_CODE.INVALID_CREDENTIALS.code,
 			ERROR_CODE.INVALID_CREDENTIALS.message,
 			[],
-			ERROR_CODE.INVALID_CREDENTIALS.statusCode,
+			401,
 		);
 	}
 
@@ -33,7 +33,7 @@ async function login(email, password) {
 			email: user.email,
 			org_id: user.organisation_id,
 		},
-		process.env.JWT_SECRET,
+		process.env.JWT_SECRET || 'defaultSecret',
 		{ expiresIn: TOKEN_EXPIRATION },
 	);
 

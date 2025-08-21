@@ -18,12 +18,10 @@ const ERROR_CODE = {
 	USER_NOT_FOUND: {
 		code: "USER_NOT_FOUND",
 		message: "User not found",
-		statusCode: 404,
 	},
 	INVALID_CREDENTIALS: {
 		code: "INVALID_CREDENTIALS",
 		message: "Invalid credentials",
-		statusCode: 401,
 	},
 };
 
