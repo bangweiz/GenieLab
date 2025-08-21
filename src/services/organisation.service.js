@@ -14,6 +14,8 @@ async function createOrganisationAndRootUser({
 	session.startTransaction();
 
 	try {
+		checkOrganisationNameExists();
+
 		// Create an Organisation
 		const organisation = new Organisation({
 			name: organisationName,
@@ -34,7 +36,7 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save User in the database
-		const savedUser = await user.save({ session });
+		await user.save({ session });
 
 		await session.commitTransaction();
 		await session.endSession();
@@ -47,6 +49,13 @@ async function createOrganisationAndRootUser({
 		await session.abortTransaction();
 		await session.endSession();
 		throw error;
+	}
+}
+
+function checkOrganisationNameExists(organisationName) {
+	const organisation = Organisation.findOne({ name: organisationName });
+	if (organisation) {
+		throw Error("The organisation name exists.");
 	}
 }
 
