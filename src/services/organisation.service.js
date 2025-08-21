@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Organisation = require("../models/organisation.model.js");
 const User = require("../models/user.model.js");
 const { SALT_RUN } = require("../constants/auth");
@@ -57,8 +57,8 @@ async function createOrganisationAndRootUser({
 	}
 }
 
-function checkOrganisationNameExists(organisationName) {
-	const organisation = Organisation.findOne({ name: organisationName });
+async function checkOrganisationNameExists(organisationName) {
+	const organisation = await Organisation.findOne({ name: organisationName });
 	if (organisation) {
 		throw new GenieLabError(
 			ERROR_CODE.ORG_NAME_EXIST.code,
