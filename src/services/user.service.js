@@ -1,31 +1,76 @@
-const User = require("../models/user.model.js");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const User = require("../models/user.model");
+const userMapper = require("../mappers/user.mapper");
+const ERROR_CODE = require("../constants/errorCode");
+const GenieLabError = require("../utils/GenieLabError");
 
-async function createUser(userData) {
-	// Validate request
-	if (!userData.name || !userData.email) {
-		throw new Error("Name and email cannot be empty");
+async function createUser(userData, organisationId) {
+	const session = await mongoose.startSession();
+	session.startTransaction();
+
+	try {
+		await checkUsernameExist(userData.username);
+		await checkEmailExist(userData.email);
+
+		const salt = bcrypt.genSaltSync(SALT_RUN);
+		const hashedPassword = bcrypt.hashSync(password, salt);
+
+		const user = new User({
+			name: userData.name,
+			email: userData.email,
+			password: hashedPassword,
+			role: userData.role,
+			organisation_id: organisationId,
+		});
+
+		await session.commitTransaction();
+		await session.endSession();
+
+		await user.save();
+	} catch (error) {
+		await session.abortTransaction();
+		await session.endSession();
+		throw error;
 	}
-
-	// Create a User
-	const user = new User({
-		name: userData.name,
-		email: userData.email,
-	});
-
-	// Save User in the database
-	return await user.save();
 }
 
 async function findAllUsers(organisation_id) {
-	return await User.find({ organisation_id });
+	const users = await User.find({ organisation_id });
+	return users.map(userMapper.entityToInfo);
 }
 
 async function findUserById(userId) {
 	const user = await User.findById(userId);
 	if (!user) {
-		throw new Error("User not found with id " + userId);
+		throw new GenieLabError(
+			ERROR_CODE.USER_NOT_FOUND.code,
+			ERROR_CODE.USER_NOT_FOUND.message,
+			[],
+			404,
+		);
 	}
-	return user;
+	return userMapper.entityToInfo(user);
+}
+
+async function checkUsernameExist(username) {
+	const user = await User.findOne({ username });
+	if (user) {
+		throw new GenieLabError(
+			ERROR_CODE.USER_EXIST.code,
+			ERROR_CODE.USER_EXIST.message,
+		);
+	}
+}
+
+async function checkEmailExist(email) {
+	const user = await User.findOne({ email });
+	if (user) {
+		throw new GenieLabError(
+			ERROR_CODE.USER_EXIST.code,
+			ERROR_CODE.USER_EXIST.message,
+		);
+	}
 }
 
 module.exports = {

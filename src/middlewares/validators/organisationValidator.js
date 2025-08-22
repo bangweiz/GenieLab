@@ -1,5 +1,4 @@
 const { body } = require("express-validator");
-const { models } = require("mongoose");
 
 const createOrganisationValidator = [
 	body("organisationName")

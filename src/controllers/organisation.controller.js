@@ -1,4 +1,4 @@
-const organisationService = require("../services/organisation.service.js");
+const organisationService = require("../services/organisation.service");
 const catchAsync = require("../utils/catchAsync");
 
 const createOrganisation = catchAsync(async (req, res) => {
