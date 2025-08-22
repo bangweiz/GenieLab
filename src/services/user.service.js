@@ -16,8 +16,8 @@ async function createUser(userData) {
 	return await user.save();
 }
 
-async function findAllUsers() {
-	return await User.find();
+async function findAllUsers(organisation_id) {
+	return await User.find({ organisation_id });
 }
 
 async function findUserById(userId) {
