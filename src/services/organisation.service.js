@@ -10,7 +10,7 @@ const SALT_RUN = 10;
 
 /**
  * Create an organisation and a root user
- * @param {import("../types/organisation.js").CreateOrganisation} param0
+ * @param {import("../types/organisation.js").CreateOrganisation} param0 
  * @returns {Promise<{organisation: import("../types/organisation.js").Organisation, user: import("../types/user.js").UserInfo}>}
  */
 async function createOrganisationAndRootUser({
@@ -19,7 +19,11 @@ async function createOrganisationAndRootUser({
 	email,
 	password,
 }) {
+	const session = await mongoose.startSession();
 	try {
+		session.startTransaction();
+		
+		// Check if organisation name exists
 		await checkOrganisationNameExists(organisationName);
 
 		// Create an Organisation
@@ -28,7 +32,7 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save Organisation in the database
-		const savedOrganisation = await organisation.save();
+		const savedOrganisation = await organisation.save({ session });
 
 		// Create a User
 		const salt = bcrypt.genSaltSync(SALT_RUN);
@@ -42,13 +46,18 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save User in the database
-		const savedUser = await user.save();
+		const savedUser = await user.save({ session });
+
+		await session.commitTransaction();
+		await session.endSession();
 
 		return {
 			organisation: savedOrganisation,
 			user: userMapper.entityToInfo(savedUser),
 		};
 	} catch (error) {
+		await session.abortTransaction();
+		await session.endSession();
 		throw error;
 	}
 }
