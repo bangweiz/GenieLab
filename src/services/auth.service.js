@@ -6,7 +6,12 @@ const { TOKEN_EXPIRATION } = require("../constants/auth");
 const ERROR_CODE = require("../constants/errorCode");
 const userMapper = require("../mappers/user.mapper");
 
-async function login(email, password) {
+/**
+ *
+ * @param {import("../types/user").UserLogin} param0
+ * @returns {Promise<string>}
+ */
+async function login({ email, password }) {
 	const user = await User.findOne({ email });
 	if (!user) {
 		throw new GenieLabError(

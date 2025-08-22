@@ -8,6 +8,11 @@ const ERROR_CODE = require("../constants/errorCode");
 
 const SALT_RUN = 10;
 
+/**
+ * Create an organisation and a root user
+ * @param {import("../types/organisation.js").CreateOrganisation} param0
+ * @returns {Promise<{organisation: import("../types/organisation.js").Organisation, user: import("../types/user.js").UserInfo}>}
+ */
 async function createOrganisationAndRootUser({
 	organisationName,
 	username,
@@ -48,6 +53,11 @@ async function createOrganisationAndRootUser({
 	}
 }
 
+/**
+ * Check if organisation name exists
+ * @param {string} organisationName
+ * @returns {Promise<void>}
+ */
 async function checkOrganisationNameExists(organisationName) {
 	const organisation = await Organisation.findOne({ name: organisationName });
 	if (organisation) {

@@ -2,7 +2,7 @@ const GenieLabError = require("../utils/GenieLabError");
 const ERROR_CODE = require("../constants/errorCode");
 
 const errorHandler = (err, req, res, next) => {
-	if (process.env.NODE_ENV !== 'test') {
+	if (process.env.NODE_ENV !== "test") {
 		console.error(err.stack);
 	}
 

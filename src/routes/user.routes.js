@@ -8,18 +8,24 @@ const {
 	createUserValidator,
 } = require("../middlewares/validators/userValidator");
 const validate = require("../middlewares/validators");
+const catchAsync = require("../utils/catchAsync");
 
 const userRouter = express.Router();
 
-userRouter.get("/", auth, role(ROLE.ROOT), users.findAllUsers);
+userRouter.get("/", auth, role(ROLE.ROOT), catchAsync(users.findAllUsers));
 userRouter.post(
 	"/",
 	auth,
 	role(ROLE.ROOT),
 	createUserValidator,
 	validate,
-	users.createUser,
+	catchAsync(users.createUser),
 );
-userRouter.get("/:userId", auth, role(ROLE.ROOT), users.findUserById);
+userRouter.get(
+	"/:userId",
+	auth,
+	role(ROLE.ROOT),
+	catchAsync(users.findUserById),
+);
 
 module.exports = userRouter;
