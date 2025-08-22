@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
 		success: false,
 		error: {
 			code: ERROR_CODE.UNKNOWN_ERROR.code,
-			message: err.message || ERROR_CODE.UNKNOWN_ERROR.message,
+			message: ERROR_CODE.UNKNOWN_ERROR.message,
 			details: [],
 		},
 	});
