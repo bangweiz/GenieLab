@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Organisation = require("../models/organisation.model.js");
 const User = require("../models/user.model.js");
-const { SALT_RUN } = require("../constants/auth");
 const userMapper = require("../mappers/user.mapper");
 const GenieLabError = require("../utils/GenieLabError");
 const ERROR_CODE = require("../constants/errorCode");
+
+const SALT_RUN = 10;
 
 async function createOrganisationAndRootUser({
 	organisationName,
@@ -13,11 +14,8 @@ async function createOrganisationAndRootUser({
 	email,
 	password,
 }) {
-	const session = await mongoose.startSession();
-	session.startTransaction();
-
 	try {
-		await checkOrganisationNameExists();
+		await checkOrganisationNameExists(organisationName);
 
 		// Create an Organisation
 		const organisation = new Organisation({
@@ -25,7 +23,7 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save Organisation in the database
-		const savedOrganisation = await organisation.save({ session });
+		const savedOrganisation = await organisation.save();
 
 		// Create a User
 		const salt = bcrypt.genSaltSync(SALT_RUN);
@@ -39,18 +37,13 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save User in the database
-		const savedUser = await user.save({ session });
-
-		await session.commitTransaction();
-		await session.endSession();
+		const savedUser = await user.save();
 
 		return {
 			organisation: savedOrganisation,
 			user: userMapper.entityToInfo(savedUser),
 		};
 	} catch (error) {
-		await session.abortTransaction();
-		await session.endSession();
 		throw error;
 	}
 }

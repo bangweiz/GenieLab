@@ -3,7 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 
 const createUser = catchAsync(async (req, res) => {
 	await userService.createUser(req.body, req.user.organisationId);
-	res.status(204);
+	res.status(201).send();
 });
 
 const findAllUsers = catchAsync(async (req, res) => {

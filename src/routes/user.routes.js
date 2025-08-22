@@ -7,7 +7,7 @@ const { ROLE } = require("../constants/auth");
 const {
 	createUserValidator,
 } = require("../middlewares/validators/userValidator");
-const { validate } = require("../models/user.model");
+const validate = require("../middlewares/validators");
 
 const userRouter = express.Router();
 

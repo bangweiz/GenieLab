@@ -5,32 +5,28 @@ const userMapper = require("../mappers/user.mapper");
 const ERROR_CODE = require("../constants/errorCode");
 const GenieLabError = require("../utils/GenieLabError");
 
-async function createUser(userData, organisationId) {
-	const session = await mongoose.startSession();
-	session.startTransaction();
+const SALT_RUN = 10;
 
+async function createUser(userData) {
 	try {
 		await checkUsernameExist(userData.username);
 		await checkEmailExist(userData.email);
 
 		const salt = bcrypt.genSaltSync(SALT_RUN);
-		const hashedPassword = bcrypt.hashSync(password, salt);
+		const hashedPassword = bcrypt.hashSync(userData.password, salt);
 
 		const user = new User({
-			name: userData.name,
+			username: userData.username,
 			email: userData.email,
 			password: hashedPassword,
 			role: userData.role,
-			organisation_id: organisationId,
+			organisation_id: userData.organisation_id,
 		});
 
-		await session.commitTransaction();
-		await session.endSession();
-
 		await user.save();
+
+		return user;
 	} catch (error) {
-		await session.abortTransaction();
-		await session.endSession();
 		throw error;
 	}
 }
