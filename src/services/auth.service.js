@@ -32,6 +32,7 @@ async function login(email, password) {
 			username: user.username,
 			email: user.email,
 			org_id: user.organisation_id,
+			role: user.role,
 		},
 		process.env.JWT_SECRET || 'defaultSecret',
 		{ expiresIn: TOKEN_EXPIRATION },
