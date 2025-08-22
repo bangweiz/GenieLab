@@ -16,7 +16,7 @@ userRouter.post(
 	"/",
 	auth,
 	role(ROLE.ROOT),
-	...createUserValidator,
+	createUserValidator,
 	validate,
 	users.createUser,
 );

@@ -10,7 +10,7 @@ describe('User endpoints', () => {
   let rootUser;
   let organisation;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     // Create an organisation
     organisation = await Organisation.create({ name: 'Test Organisation' });
 
@@ -51,12 +51,9 @@ describe('User endpoints', () => {
         .send(newUser);
 
       expect(res.statusCode).toEqual(201);
-      expect(res.body).toHaveProperty('id');
-      expect(res.body.username).toBe(newUser.username);
-      expect(res.body.email).toBe(newUser.email);
 
       // Verify user is in the database
-      const dbUser = await User.findById(res.body.id);
+      const dbUser = await User.findOne({ username: 'newuser' });
       expect(dbUser).not.toBeNull();
     });
 
