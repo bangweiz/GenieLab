@@ -7,7 +7,7 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const findAllUsers = catchAsync(async (req, res) => {
-	const users = await userService.findAllUsers();
+	const users = await userService.findAllUsers(req.user.orgId);
 	res.send(users);
 });
 

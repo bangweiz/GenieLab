@@ -31,10 +31,10 @@ async function login(email, password) {
 			id: user._id,
 			username: user.username,
 			email: user.email,
-			org_id: user.organisation_id,
+			orgId: user.organisation_id,
 			role: user.role,
 		},
-		process.env.JWT_SECRET || 'defaultSecret',
+		process.env.JWT_SECRET || "defaultSecret",
 		{ expiresIn: TOKEN_EXPIRATION },
 	);
 
