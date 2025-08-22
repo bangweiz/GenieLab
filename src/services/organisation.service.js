@@ -19,37 +19,42 @@ async function createOrganisationAndRootUser({
 	email,
 	password,
 }) {
+	const session = await mongoose.startSession();
+
 	try {
-		await checkOrganisationNameExists(organisationName);
+		return await session.withTransaction(async () => {
+			// Check if organisation name exists
+			await checkOrganisationNameExists(organisationName);
 
-		// Create an Organisation
-		const organisation = new Organisation({
-			name: organisationName,
+			// Create an Organisation
+			const organisation = new Organisation({
+				name: organisationName,
+			});
+
+			// Save Organisation in the database
+			const savedOrganisation = await organisation.save({ session });
+
+			// Create a User
+			const salt = bcrypt.genSaltSync(SALT_RUN);
+			const hashedPassword = bcrypt.hashSync(password, salt);
+			const user = new User({
+				username,
+				email,
+				password: hashedPassword,
+				organisation_id: savedOrganisation._id,
+				role: "root",
+			});
+
+			// Save User in the database
+			const savedUser = await user.save({ session });
+
+			return {
+				organisation: savedOrganisation,
+				user: userMapper.entityToInfo(savedUser),
+			};
 		});
-
-		// Save Organisation in the database
-		const savedOrganisation = await organisation.save();
-
-		// Create a User
-		const salt = bcrypt.genSaltSync(SALT_RUN);
-		const hashedPassword = bcrypt.hashSync(password, salt);
-		const user = new User({
-			username,
-			email,
-			password: hashedPassword,
-			organisation_id: savedOrganisation._id,
-			role: "root",
-		});
-
-		// Save User in the database
-		const savedUser = await user.save();
-
-		return {
-			organisation: savedOrganisation,
-			user: userMapper.entityToInfo(savedUser),
-		};
-	} catch (error) {
-		throw error;
+	} finally {
+		await session.endSession();
 	}
 }
 
