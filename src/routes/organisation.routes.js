@@ -1,6 +1,6 @@
 const express = require("express");
 
-const organisations = require("../controllers/organisation.controller.js");
+const organisations = require("../controllers/organisation.controller");
 const validate = require("../middlewares/validators/index");
 const {
 	createOrganisationValidator,

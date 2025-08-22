@@ -23,6 +23,18 @@ const ERROR_CODE = {
 		code: "INVALID_CREDENTIALS",
 		message: "Invalid credentials",
 	},
+	UNAUTHENTICATED: {
+		code: "UNAUTHENTICATED",
+		message: "Unauthenticated",
+	},
+	FORBIDDEN: {
+		code: "FORBIDDEN",
+		message: "No permission",
+	},
+	USER_EXIST: {
+		code: "USER_EXIST",
+		message: "User already exists",
+	},
 };
 
 module.exports = ERROR_CODE;

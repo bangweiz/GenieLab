@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const Organisation = require("../models/organisation.model.js");
 const User = require("../models/user.model.js");
 const { SALT_RUN } = require("../constants/auth");
+const userMapper = require("../mappers/user.mapper");
 const GenieLabError = require("../utils/GenieLabError");
 const ERROR_CODE = require("../constants/errorCode");
 
@@ -16,7 +17,7 @@ async function createOrganisationAndRootUser({
 	session.startTransaction();
 
 	try {
-		checkOrganisationNameExists();
+		await checkOrganisationNameExists();
 
 		// Create an Organisation
 		const organisation = new Organisation({
@@ -38,22 +39,19 @@ async function createOrganisationAndRootUser({
 		});
 
 		// Save User in the database
-		await user.save({ session });
+		const savedUser = await user.save({ session });
 
 		await session.commitTransaction();
 		await session.endSession();
 
 		return {
 			organisation: savedOrganisation,
-			user: { username, email, role: "root" },
+			user: userMapper.entityToInfo(savedUser),
 		};
 	} catch (error) {
 		await session.abortTransaction();
 		await session.endSession();
-		throw new GenieLabError(
-			ERROR_CODE.DB_ERROR.code,
-			error.message || ERROR_CODE.DB_ERROR.message,
-		);
+		throw error;
 	}
 }
 

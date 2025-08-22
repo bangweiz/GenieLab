@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 const GenieLabError = require("../utils/GenieLabError");
 const { TOKEN_EXPIRATION } = require("../constants/auth");
 const ERROR_CODE = require("../constants/errorCode");
+const userMapper = require("../mappers/user.mapper");
 
 async function login(email, password) {
 	const user = await User.findOne({ email });
@@ -27,13 +28,7 @@ async function login(email, password) {
 	}
 
 	const token = jwt.sign(
-		{
-			id: user._id,
-			username: user.username,
-			email: user.email,
-			orgId: user.organisation_id,
-			role: user.role,
-		},
+		userMapper.entityToInfo(user),
 		process.env.JWT_SECRET || "defaultSecret",
 		{ expiresIn: TOKEN_EXPIRATION },
 	);

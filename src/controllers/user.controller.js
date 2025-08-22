@@ -1,13 +1,13 @@
-const userService = require("../services/user.service.js");
+const userService = require("../services/user.service");
 const catchAsync = require("../utils/catchAsync");
 
 const createUser = catchAsync(async (req, res) => {
-	const user = await userService.createUser(req.body);
-	res.status(201).send(user);
+	await userService.createUser(req.body, req.user.organisationId);
+	res.status(204);
 });
 
 const findAllUsers = catchAsync(async (req, res) => {
-	const users = await userService.findAllUsers(req.user.orgId);
+	const users = await userService.findAllUsers(req.user.organisationId);
 	res.send(users);
 });
 
