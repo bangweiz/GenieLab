@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const connectDB = require("./config/database");
 const router = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -22,15 +21,4 @@ app.use("/api", router);
 // Error handling middleware
 app.use(errorHandler);
 
-// listen for requests
-const port = process.env.PORT || 3000;
-
-async function start() {
-	await connectDB();
-
-	app.listen(port, async () => {
-		console.log(`Server is listening on port ${port}`);
-	});
-}
-
-module.exports = start;
+module.exports = app;
