@@ -7,7 +7,13 @@ const GenieLabError = require("../utils/GenieLabError");
 
 const SALT_RUN = 10;
 
-async function createUser(userData) {
+/**
+ * Create a new user
+ * @param {import("../types/user").CreateUser} userData
+ * @param {string} organisationId
+ * @returns {Promise<import("../types/user").UserInfo>}
+ */
+async function createUser(userData, organisationId) {
 	try {
 		await checkUsernameExist(userData.username);
 		await checkEmailExist(userData.email);
@@ -20,22 +26,32 @@ async function createUser(userData) {
 			email: userData.email,
 			password: hashedPassword,
 			role: userData.role,
-			organisation_id: userData.organisation_id,
+			organisation_id: organisationId,
 		});
 
-		await user.save();
+		const savedUser = await user.save();
 
-		return user;
+		return userMapper.entityToInfo(savedUser);
 	} catch (error) {
 		throw error;
 	}
 }
 
+/**
+ * List all users in an organisation
+ * @param {string} organisation_id
+ * @returns {Promise<Array<import("../types/user").UserInfo>>}
+ */
 async function findAllUsers(organisation_id) {
 	const users = await User.find({ organisation_id });
 	return users.map(userMapper.entityToInfo);
 }
 
+/**
+ * Find user by id
+ * @param {string} userId
+ * @returns {Promise<import("../types/user").UserInfo>}
+ */
 async function findUserById(userId) {
 	const user = await User.findById(userId);
 	if (!user) {
@@ -49,6 +65,11 @@ async function findUserById(userId) {
 	return userMapper.entityToInfo(user);
 }
 
+/**
+ * Check if username exists
+ * @param {string} username
+ * @returns {Promise<boolean>}
+ */
 async function checkUsernameExist(username) {
 	const user = await User.findOne({ username });
 	if (user) {
@@ -59,6 +80,12 @@ async function checkUsernameExist(username) {
 	}
 }
 
+/**
+ * Check email exists
+ * @param {string} email
+ * @returns {Promise<void>}
+
+ */
 async function checkEmailExist(email) {
 	const user = await User.findOne({ email });
 	if (user) {

@@ -1,11 +1,15 @@
 const authService = require("../services/auth.service");
-const catchAsync = require("../utils/catchAsync");
 
-const login = catchAsync(async (req, res) => {
-	const { email, password } = req.body;
-	const token = await authService.login(email, password);
+/**
+ * Handle user login
+ * @param {import('express').Request<any, any, import('../types/user').UserLogin>} req - The request object with UserLogin body
+ * @param {import('express').Response} res - The response object
+ * @returns {Promise<void>}
+ */
+async function login(req, res) {
+	const token = await authService.login(req.body);
 	res.json({ token });
-});
+}
 
 module.exports = {
 	login,
