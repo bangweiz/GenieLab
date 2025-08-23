@@ -1,19 +1,18 @@
 const Instruction = require("../models/instruction.model");
-const { v4: uuidv4 } = require("uuid");
+const instructionMapper = require("../mappers/instruction.mapper");
 
 /**
  * Create a new instruction
- * @param {object} instructionData - The instruction data
+ * @param {import("../types/instruction").CreateInstruction} instructionData - The instruction data
  * @param {string} organisationId - The ID of the organisation
- * @returns {Promise<Instruction>}
+ * @returns {Promise<import("../types/instruction").InstructionInfo>}
  */
 const createInstruction = async (instructionData, organisationId) => {
-	const instruction = new Instruction({
-		...instructionData,
-		instruction_id: uuidv4(),
-		organisation_id: organisationId,
-	});
-	return await instruction.save();
+	const instruction = new Instruction(
+		instructionMapper.toEntity(instructionData, organisationId),
+	);
+	const savedInstruction = await instruction.save();
+	return instructionMapper.toInfo(savedInstruction);
 };
 
 module.exports = {
