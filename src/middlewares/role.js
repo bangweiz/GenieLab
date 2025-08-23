@@ -23,7 +23,7 @@ function role(requiredRole) {
 		}
 
 		const userRole = req.user.role;
-		
+
 		// Check role hierarchy
 		let hasPermission = false;
 		switch (requiredRole) {
@@ -48,7 +48,7 @@ function role(requiredRole) {
 				403,
 			);
 		}
-		
+
 		next();
 	};
 }

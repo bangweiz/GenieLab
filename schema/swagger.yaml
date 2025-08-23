@@ -8,11 +8,21 @@ servers:
     description: Local development server
   - url: https://yourdomain.com/api
     description: Production server
+tags:
+  - name: Auth
+    description: Authentication endpoints
+  - name: Organisation
+    description: Organisation management endpoints
+  - name: User
+    description: User management endpoints
+  - name: Instruction
+    description: Instruction management endpoints
 
 paths:
   /auth/login:
     post:
       summary: User login
+      tags: [Auth]
       description: Authenticate a user and receive a JWT token
       requestBody:
         required: true
@@ -43,6 +53,7 @@ paths:
   /users:
     get:
       summary: Get all users
+      tags: [User]
       description: Retrieve a list of all users (root role required)
       security:
         - bearerAuth: []
@@ -69,6 +80,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       summary: Create a new user
+      tags: [User]
       description: Create a new user (root role required)
       security:
         - bearerAuth: []
@@ -107,15 +119,12 @@ paths:
   /users/{userId}:
     get:
       summary: Get a specific user
+      tags: [User]
       description: Retrieve details of a specific user by ID (root role required)
       security:
         - bearerAuth: []
       parameters:
-        - name: userId
-          required: true
-          in: path
-          schema:
-            type: string
+        - $ref: '#/components/parameters/userId'
       responses:
         '200':
           description: User details
@@ -145,6 +154,7 @@ paths:
   /organisations:
     post:
       summary: Create a new organisation
+      tags: [Organisation]
       description: Create a new organisation with a root user
       requestBody:
         required: true
@@ -171,7 +181,155 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /instructions:
+    get:
+      summary: Get all instructions
+      tags: [Instruction]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstructionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new instruction
+      tags: [Instruction]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInstruction'
+      responses:
+        '201':
+          description: The created instruction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /instructions/{instructionId}:
+    get:
+      summary: Get an instruction
+      tags: [Instructions]
+      parameters:
+        - $ref: '#/components/parameters/instructionId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Update an instruction
+      description: Update an instruction
+      tags: [Instructions]
+      parameters:
+        - $ref: '#/components/parameters/instructionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInstruction'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
 components:
+  parameters:
+    userId:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+    instructionId:
+      in: path
+      name: instructionId
+      required: true
+      schema:
+        type: string
   schemas:
     Token:
       type: object
@@ -286,6 +444,65 @@ components:
           type: string
           example: <PASSWORD>
           description: User password
+    InstructionInfo:
+      type: object
+      required:
+        - instructionId
+        - name
+        - content
+        - version
+        - type
+      properties:
+        instructionId:
+          type: string
+          format: uuid
+          example: 5f8d0d55b547644294b9e7f8
+        name:
+          type: string
+          example: My Instruction
+          description: Instruction name
+        content:
+          type: string
+          description: Instruction content
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        version:
+          type: integer
+          example: 1
+        type:
+          type: string
+          enum: [personality, guardian, operation]
+          description: Instruction type
+    CreateInstruction: 
+      type: object
+      required:
+        - name
+        - content
+        - type
+      properties:
+        name:
+          type: string
+          example: My Instruction
+          description: Instruction name
+        content:
+          type: string
+          description: Instruction content
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        type:
+          type: string
+          enum: [personality, guardian, operation]
+          description: Instruction type
+    UpdateInstruction:
+      type: object
+      properties:
+        name:
+          type: string
+          example: My Instruction
+          description: Instruction name
+        content:
+          type: string
+          description: Instruction content
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  
     Error:
       type: object
       properties:
