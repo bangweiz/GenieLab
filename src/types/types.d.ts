@@ -192,7 +192,7 @@ export interface paths {
 				query?: never;
 				header?: never;
 				path: {
-					userId: string;
+					userId: components["parameters"]["userId"];
 				};
 				cookie?: never;
 			};
@@ -284,6 +284,241 @@ export interface paths {
 				};
 				/** @description Validation error */
 				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/instructions": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get all instructions */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description OK */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InstructionInfo"][];
+					};
+				};
+				/** @description Validation error */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Forbidden - insufficient permissions */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/** Create a new instruction */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path?: never;
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["CreateInstruction"];
+				};
+			};
+			responses: {
+				/** @description The created instruction */
+				201: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InstructionInfo"];
+					};
+				};
+				/** @description Validation error */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Forbidden - insufficient permissions */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+			};
+		};
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/instructions/{instructionId}": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get an instruction */
+		get: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					instructionId: components["parameters"]["instructionId"];
+				};
+				cookie?: never;
+			};
+			requestBody?: never;
+			responses: {
+				/** @description Success */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InstructionInfo"];
+					};
+				};
+				/** @description Validation error */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Forbidden - insufficient permissions */
+				403: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+			};
+		};
+		put?: never;
+		/**
+		 * Update an instruction
+		 * @description Update an instruction
+		 */
+		post: {
+			parameters: {
+				query?: never;
+				header?: never;
+				path: {
+					instructionId: components["parameters"]["instructionId"];
+				};
+				cookie?: never;
+			};
+			requestBody: {
+				content: {
+					"application/json": components["schemas"]["UpdateInstruction"];
+				};
+			};
+			responses: {
+				/** @description Success */
+				200: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["InstructionInfo"];
+					};
+				};
+				/** @description Validation error */
+				400: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Unauthorized */
+				401: {
+					headers: {
+						[name: string]: unknown;
+					};
+					content: {
+						"application/json": components["schemas"]["Error"];
+					};
+				};
+				/** @description Forbidden - insufficient permissions */
+				403: {
 					headers: {
 						[name: string]: unknown;
 					};
@@ -394,6 +629,59 @@ export interface components {
 			 */
 			password: string;
 		};
+		InstructionInfo: {
+			/**
+			 * Format: uuid
+			 * @example 5f8d0d55b547644294b9e7f8
+			 */
+			instructionId: string;
+			/**
+			 * @description Instruction name
+			 * @example My Instruction
+			 */
+			name: string;
+			/**
+			 * @description Instruction content
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			content: string;
+			/** @example 1 */
+			version: number;
+			/**
+			 * @description Instruction type
+			 * @enum {string}
+			 */
+			type: "personality" | "guardian" | "operation";
+		};
+		CreateInstruction: {
+			/**
+			 * @description Instruction name
+			 * @example My Instruction
+			 */
+			name: string;
+			/**
+			 * @description Instruction content
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			content: string;
+			/**
+			 * @description Instruction type
+			 * @enum {string}
+			 */
+			type: "personality" | "guardian" | "operation";
+		};
+		UpdateInstruction: {
+			/**
+			 * @description Instruction name
+			 * @example My Instruction
+			 */
+			name?: string;
+			/**
+			 * @description Instruction content
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			content?: string;
+		};
 		Error: {
 			/** @example Error description */
 			message: string;
@@ -404,7 +692,10 @@ export interface components {
 		};
 	};
 	responses: never;
-	parameters: never;
+	parameters: {
+		userId: string;
+		instructionId: string;
+	};
 	requestBodies: never;
 	headers: never;
 	pathItems: never;
