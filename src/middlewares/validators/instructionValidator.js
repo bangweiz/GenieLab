@@ -9,11 +9,17 @@ const createInstructionValidator = [
 	body("content")
 		.notEmpty()
 		.withMessage("Content is required")
-		.isLength({ min: 3, max: 500 })
-		.withMessage("Content must be between 3 and 500 characters"),
+		.isLength({ min: 3, max: 5000 })
+		.withMessage("Content must be between 3 and 5000 characters"),
 	body("type")
 		.isIn(["personality", "guardian", "operation"])
 		.withMessage("Invalid instruction type"),
+	body("description")
+		.optional()
+		.isString()
+		.withMessage("Description must be a string")
+		.isLength({ max: 500 })
+		.withMessage("Description cannot be more than 500 characters"),
 ];
 
 module.exports = {

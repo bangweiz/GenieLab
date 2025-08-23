@@ -193,7 +193,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/InstructionInfo'
+                  $ref: '#/components/schemas/InstructionInfoList'
         '400':
           description: Validation error
           content:
@@ -227,7 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionInfo'
+                $ref: '#/components/schemas/InstructionDetails'
         '400':
           description: Validation error
           content:
@@ -258,7 +258,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionInfo'
+                $ref: '#/components/schemas/InstructionDetails'
         '400':
           description: Validation error
           content:
@@ -295,7 +295,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionInfo'
+                $ref: '#/components/schemas/InstructionDetails'
         '400':
           description: Validation error
           content:
@@ -449,8 +449,6 @@ components:
       required:
         - instructionId
         - name
-        - content
-        - version
         - type
       properties:
         instructionId:
@@ -461,17 +459,52 @@ components:
           type: string
           example: My Instruction
           description: Instruction name
-        content:
-          type: string
-          description: Instruction content
-          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        version:
-          type: integer
-          example: 1
         type:
           type: string
           enum: [personality, guardian, operation]
           description: Instruction type
+    InstructionDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/InstructionInfo'
+        - type: object
+          required:
+            - versions
+          properties:
+            versions:
+              $ref: '#/components/schemas/InstructionVersionList'
+    InstructionInfoList:
+      type: array
+      items:
+        $ref: '#/components/schemas/InstructionInfo'
+    InstructionVersion:
+      type: object
+      required:
+        - instructionVersionId
+        - version
+        - description
+        - content
+      properties:
+        instructionVersionId:
+          type: string
+          description: Instruction version id
+          example: 1
+        version:
+          type: integer
+          description: Instruction version
+          example: 1
+        description:
+          type: string
+          description: Instruction description
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        content:
+          type: string
+          description: Instruction content
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    InstructionVersionList:
+      type: array
+      items:
+        $ref: '#/components/schemas/InstructionVersion'
     CreateInstruction: 
       type: object
       required:
@@ -491,16 +524,20 @@ components:
           type: string
           enum: [personality, guardian, operation]
           description: Instruction type
+        description:
+          type: string
+          description: Instruction description
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     UpdateInstruction:
       type: object
       properties:
-        name:
-          type: string
-          example: My Instruction
-          description: Instruction name
         content:
           type: string
           description: Instruction content
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        description:
+          type: string
+          description: Instruction description
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
   
     Error:

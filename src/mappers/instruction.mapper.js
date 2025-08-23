@@ -1,35 +1,56 @@
-const { v4: uuidv4 } = require("uuid");
 /**
- * @param {import("../types/instruction").CreateInstruction} createInstruction
- * @param {string} organisationId
- * @returns {import("../types/instruction").InstructionEntity}
+ * @param {import("../types/instruction").InstructionEntity} instruction
+ * @param {import("../types/instruction").InstructionVersionEntity} instructionVersion
+ * @returns {import("../types/instruction").InstructionDetails}
  */
-function toEntity(createInstruction, organisationId) {
+function toInstructionDetail(instruction, instructionVersion) {
 	return {
-		instruction_id: uuidv4(),
-		version: 1,
-		name: createInstruction.name,
-		content: createInstruction.content,
-		type: createInstruction.type,
-		organisation_id: organisationId,
+		instructionId: instruction._id,
+		name: instruction.name,
+		type: instruction.type,
+		versions: [
+			{
+				instructionVersionId: instructionVersion._id,
+				version: instructionVersion.version,
+				description: instructionVersion.description,
+				content: instructionVersion.content,
+			},
+		],
 	};
 }
 
 /**
- * @param {import("../types/instruction").InstructionEntity} instructionEntity
- * @returns {import("../types/instruction").InstructionInfo}
+ *
+ * @param {import("../types/instruction").CreateInstruction} instructionData
+ * @param {string} organisationId
+ * @returns {import("../types/instruction").InstructionEntity}
  */
-function toInfo(instructionEntity) {
+function toInstructionEntity(instructionData, organisationId) {
 	return {
-		instructionId: instructionEntity.instruction_id,
-		version: instructionEntity.version,
-		name: instructionEntity.name,
-		content: instructionEntity.content,
-		type: instructionEntity.type,
+		name: instructionData.name,
+		type: instructionData.type,
+		organisation_id: organisationId,
+		latestVersion: 1,
+	};
+}
+
+/**
+ *
+ * @param {import("../types/instruction").InstructionEntity} instructionEntity
+ * @param {import("../types/instruction").CreateInstruction} instructionData
+ * @returns {import("../types/instruction").InstructionVersionEntity}
+ */
+function toInstructionVersionEntity(instructionEntity, instructionData) {
+	return {
+		instruction_id: instructionEntity._id,
+		version: instructionEntity.latestVersion,
+		content: instructionData.content,
+		description: instructionData.description,
 	};
 }
 
 module.exports = {
-	toEntity,
-	toInfo,
+	toInstructionDetail,
+	toInstructionEntity,
+	toInstructionVersionEntity,
 };

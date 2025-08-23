@@ -2,21 +2,12 @@ const mongoose = require("mongoose");
 
 const InstructionSchema = new mongoose.Schema(
 	{
-		instruction_id: {
-			type: String,
+		organisation_id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Organisation",
 			required: true,
-			unique: true,
-		},
-		version: {
-			type: Number,
-			required: true,
-			default: 1,
 		},
 		name: {
-			type: String,
-			required: true,
-		},
-		content: {
 			type: String,
 			required: true,
 		},
@@ -25,9 +16,10 @@ const InstructionSchema = new mongoose.Schema(
 			enum: ["personality", "guardian", "operation"],
 			required: true,
 		},
-		organisation_id: {
-			type: String,
+		latestVersion: {
+			type: Number,
 			required: true,
+			default: 1,
 		},
 	},
 	{
