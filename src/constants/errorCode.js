@@ -35,6 +35,10 @@ const ERROR_CODE = {
 		code: "USER_EXIST",
 		message: "User already exists",
 	},
+	INSTRUCTION_NAME_EXIST: {
+		code: "INSTRUCTION_NAME_EXIST",
+		message: "Instruction name already exists",
+	}
 };
 
 module.exports = ERROR_CODE;
