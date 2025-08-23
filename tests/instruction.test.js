@@ -4,15 +4,9 @@ const Organisation = require("../src/models/organisation.model");
 const User = require("../src/models/user.model");
 const Instruction = require("../src/models/instruction.model");
 const InstructionVersion = require("../src/models/instruction_version.model");
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 describe("Instruction endpoints", () => {
-	afterAll(async () => {
-		await mongoose.connection.dropDatabase();
-		await mongoose.connection.close();
-	});
-
 	describe("POST /api/instructions", () => {
 		it("should create a new instruction and an instruction version", async () => {
 			const org = await new Organisation({ name: "Test Org" }).save();
@@ -50,10 +44,10 @@ describe("Instruction endpoints", () => {
 			expect(res.statusCode).toEqual(201);
 			expect(res.body).toHaveProperty("instructionId");
 			expect(res.body.name).toBe(newInstruction.name);
-			expect(res.body.content).toBe(newInstruction.content);
 			expect(res.body.type).toBe(newInstruction.type);
-			expect(res.body.description).toBe(newInstruction.description);
-			expect(res.body.version).toBe(1);
+			expect(res.body.versions[0].content).toBe(newInstruction.content);
+			expect(res.body.versions[0].description).toBe(newInstruction.description);
+			expect(res.body.versions[0].version).toBe(1);
 
 			// Verify instruction and instruction version are in the database
 			const instruction = await Instruction.findById(res.body.instructionId);

@@ -24,7 +24,4 @@ const InstructionVersionSchema = new mongoose.Schema(
 	},
 );
 
-module.exports = mongoose.model(
-	"InstructionVersion",
-	InstructionVersionSchema,
-);
+module.exports = mongoose.model("InstructionVersion", InstructionVersionSchema);

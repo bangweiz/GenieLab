@@ -322,7 +322,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InstructionInfo"][];
+						"application/json": components["schemas"]["InstructionInfoList"][];
 					};
 				};
 				/** @description Validation error */
@@ -375,7 +375,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InstructionInfo"];
+						"application/json": components["schemas"]["InstructionDetails"];
 					};
 				};
 				/** @description Validation error */
@@ -438,7 +438,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InstructionInfo"];
+						"application/json": components["schemas"]["InstructionDetails"];
 					};
 				};
 				/** @description Validation error */
@@ -496,7 +496,7 @@ export interface paths {
 						[name: string]: unknown;
 					};
 					content: {
-						"application/json": components["schemas"]["InstructionInfo"];
+						"application/json": components["schemas"]["InstructionDetails"];
 					};
 				};
 				/** @description Validation error */
@@ -641,18 +641,38 @@ export interface components {
 			 */
 			name: string;
 			/**
-			 * @description Instruction content
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			content: string;
-			/** @example 1 */
-			version: number;
-			/**
 			 * @description Instruction type
 			 * @enum {string}
 			 */
 			type: "personality" | "guardian" | "operation";
 		};
+		InstructionDetails: components["schemas"]["InstructionInfo"] & {
+			versions: components["schemas"]["InstructionVersionList"];
+		};
+		InstructionInfoList: components["schemas"]["InstructionInfo"][];
+		InstructionVersion: {
+			/**
+			 * @description Instruction version id
+			 * @example 1
+			 */
+			instructionVersionId: string;
+			/**
+			 * @description Instruction version
+			 * @example 1
+			 */
+			version: number;
+			/**
+			 * @description Instruction description
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			description: string;
+			/**
+			 * @description Instruction content
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			content: string;
+		};
+		InstructionVersionList: components["schemas"]["InstructionVersion"][];
 		CreateInstruction: {
 			/**
 			 * @description Instruction name
@@ -669,18 +689,23 @@ export interface components {
 			 * @enum {string}
 			 */
 			type: "personality" | "guardian" | "operation";
+			/**
+			 * @description Instruction description
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			description?: string;
 		};
 		UpdateInstruction: {
-			/**
-			 * @description Instruction name
-			 * @example My Instruction
-			 */
-			name?: string;
 			/**
 			 * @description Instruction content
 			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 			 */
 			content?: string;
+			/**
+			 * @description Instruction description
+			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+			 */
+			description?: string;
 		};
 		Error: {
 			/** @example Error description */
