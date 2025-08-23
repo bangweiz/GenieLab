@@ -1,35 +1,19 @@
-const { v4: uuidv4 } = require("uuid");
 /**
- * @param {import("../types/instruction").CreateInstruction} createInstruction
- * @param {string} organisationId
- * @returns {import("../types/instruction").InstructionEntity}
- */
-function toEntity(createInstruction, organisationId) {
-	return {
-		instruction_id: uuidv4(),
-		version: 1,
-		name: createInstruction.name,
-		content: createInstruction.content,
-		type: createInstruction.type,
-		organisation_id: organisationId,
-	};
-}
-
-/**
- * @param {import("../types/instruction").InstructionEntity} instructionEntity
+ * @param {import("../types/instruction").Instruction} instruction
+ * @param {import("../types/instruction").InstructionVersion} instructionVersion
  * @returns {import("../types/instruction").InstructionInfo}
  */
-function toInfo(instructionEntity) {
+function toInfo(instruction, instructionVersion) {
 	return {
-		instructionId: instructionEntity.instruction_id,
-		version: instructionEntity.version,
-		name: instructionEntity.name,
-		content: instructionEntity.content,
-		type: instructionEntity.type,
+		instructionId: instruction._id.toString(),
+		name: instruction.name,
+		type: instruction.type,
+		version: instructionVersion.version,
+		content: instructionVersion.content,
+		description: instructionVersion.description,
 	};
 }
 
 module.exports = {
-	toEntity,
 	toInfo,
 };

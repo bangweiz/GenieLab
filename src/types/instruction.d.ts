@@ -1,13 +1,21 @@
 import { components } from "./types";
 
-export type InstructionEntity = {
+export type Instruction = {
+	_id: string;
+	name: string;
+	type: "personality" | "guardian" | "operation";
+	organisation_id: string;
+	latestVersion: number;
+	createdAt: string;
+	updatedAt: string;
+};
+
+export type InstructionVersion = {
 	_id: string;
 	instruction_id: string;
 	version: number;
-	name: string;
 	content: string;
-	type: "personality" | "guardian" | "operation";
-	organisation_id: string;
+	description?: string;
 	createdAt: string;
 	updatedAt: string;
 };
