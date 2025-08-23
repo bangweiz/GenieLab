@@ -9,7 +9,7 @@ export type UserEntity = {
 	role: "root" | "admin" | "user";
 };
 
-export type User = components["schemas"]["Token"];
+export type Token = components["schemas"]["Token"];
 export type UserLogin = components["schemas"]["UserLogin"];
 export type UserInfo = components["schemas"]["UserInfo"];
 export type CreateUser = components["schemas"]["CreateUser"];
