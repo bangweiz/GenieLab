@@ -39,6 +39,10 @@ const ERROR_CODE = {
 		code: "INSTRUCTION_NAME_EXIST",
 		message: "Instruction name already exists",
 	},
+	INSTRUCTION_NOT_FOUND: {
+		code: "INSTRUCTION_NOT_FOUND",
+		message: "Instruction not found",
+	},
 };
 
 module.exports = ERROR_CODE;

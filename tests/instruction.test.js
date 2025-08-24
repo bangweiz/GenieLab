@@ -3,7 +3,7 @@ const app = require("../src/app");
 const Organisation = require("../src/models/organisation.model");
 const User = require("../src/models/user.model");
 const Instruction = require("../src/models/instruction.model");
-const InstructionVersion = require("../src/models/instruction_version.model");
+const InstructionVersion = require("../src/models/instructionVersion.model");
 const bcrypt = require("bcryptjs");
 
 describe("Instruction endpoints", () => {

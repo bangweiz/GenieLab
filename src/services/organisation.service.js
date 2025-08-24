@@ -24,7 +24,7 @@ async function createOrganisationAndRootUser({
 	try {
 		return await session.withTransaction(async () => {
 			// Check if organisation name exists
-			await checkOrganisationNameExists(organisationName);
+			await checkOrganisationNameExists(organisationName, session);
 
 			// Create an Organisation
 			const organisation = new Organisation({
@@ -61,10 +61,11 @@ async function createOrganisationAndRootUser({
 /**
  * Check if organisation name exists
  * @param {string} organisationName
+ * @param {mongoose.ClientSession} session
  * @returns {Promise<void>}
  */
-async function checkOrganisationNameExists(organisationName) {
-	const organisation = await Organisation.findOne({ name: organisationName });
+async function checkOrganisationNameExists(organisationName, session = null) {
+	const organisation = await Organisation.findOne({ name: organisationName }, null, { session });
 	if (organisation) {
 		throw new GenieLabError(
 			ERROR_CODE.ORG_NAME_EXIST.code,

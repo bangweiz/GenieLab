@@ -279,10 +279,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       summary: Update an instruction
-      description: |-
-        Update an instruction.
-        When only description needs to be updated, find the latest version of the instruction, and update the description.
-        When content needs to be updated, create a new version of the instruction. If description is not provided, use the one of the latest version, otherwise, use the provided description.
+      description: Update an instruction.
       tags: [Instruction]
       parameters:
         - $ref: '#/components/parameters/instructionId'

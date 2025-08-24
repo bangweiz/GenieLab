@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Instruction = require("../models/instruction.model");
-const InstructionVersion = require("../models/instruction_version.model");
+const InstructionVersion = require("../models/instructionVersion.model");
 const instructionMapper = require("../mappers/instruction.mapper");
 const { ERROR_CODE } = require("../constants/errorCode");
 const GenieLabError = require("../utils/GenieLabError");
@@ -44,34 +44,10 @@ async function createInstruction(instructionData, organisationId) {
 }
 
 /**
- *
- * @param {string} name
- * @param {string} organisationId
- * @param {mongoose.mongo.ClientSession} session
- * @returns {Promise<void>}
- */
-async function checkNameExist(name, organisationId, session = null) {
-	const instruction = await Instruction.findOne(
-		{
-			name,
-			organisation_id: organisationId,
-		},
-		null,
-		{ session },
-	);
-	if (instruction) {
-		throw new GenieLabError(
-			ERROR_CODE.INSTRUCTION_NAME_EXIST.code,
-			ERROR_CODE.INSTRUCTION_NAME_EXIST.message,
-		);
-	}
-}
-
-/**
  * Update an instruction
  * @param {string} instructionId - The ID of the instruction to update
  * @param {string} organisationId - The ID of the organisation
- * @param {import("../types/instruction").UpdateInstructionBody} instructionData - The instruction data
+ * @param {import("../types/instruction").UpdateInstruction} instructionData - The instruction data
  * @returns {Promise<import("../types/instruction").InstructionDetails>}
  */
 async function updateInstruction(instructionId, organisationId, instructionData) {
@@ -92,6 +68,8 @@ async function updateInstruction(instructionId, organisationId, instructionData)
 				throw new GenieLabError(
 					ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
 					ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+					[],
+					404,
 				);
 			}
 
@@ -116,14 +94,36 @@ async function updateInstruction(instructionId, organisationId, instructionData)
 				return instructionMapper.toInstructionDetail(instruction, savedVersion);
 			}
 
-			if (instructionData.description) {
-				latestVersion.description = instructionData.description;
-			}
+			latestVersion.description = instructionData.description;
 			const savedVersion = await latestVersion.save({ session });
 			return instructionMapper.toInstructionDetail(instruction, savedVersion);
 		});
 	} finally {
 		session.endSession();
+	}
+}
+
+/**
+ * Check if an instruction with the same name exists
+ * @param {string} name
+ * @param {string} organisationId
+ * @param {mongoose.mongo.ClientSession} session
+ * @returns {Promise<void>}
+ */
+async function checkNameExist(name, organisationId, session = null) {
+	const instruction = await Instruction.findOne(
+		{
+			name,
+			organisation_id: organisationId,
+		},
+		null,
+		{ session },
+	);
+	if (instruction) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_NAME_EXIST.code,
+			ERROR_CODE.INSTRUCTION_NAME_EXIST.message,
+		);
 	}
 }
 
