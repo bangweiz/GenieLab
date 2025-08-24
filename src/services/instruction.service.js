@@ -92,7 +92,7 @@ async function updateInstruction(instructionId, organisationId, instructionData)
 				return instructionMapper.toInstructionDetail(instruction, latestVersion);
 			}
 
-			if (instructionData.content && !isContentSame) {
+			if (!isContentSame) {
 				const newVersion = new InstructionVersion({
 					instruction_id: instructionId,
 					version: latestVersion.version + 1,
@@ -105,8 +105,7 @@ async function updateInstruction(instructionId, organisationId, instructionData)
 				return instructionMapper.toInstructionDetail(instruction, savedVersion);
 			}
 
-			latestVersion.description =
-				instructionData.description || latestVersion.description;
+			latestVersion.description = instructionData.description;
 			const savedVersion = await latestVersion.save({ session });
 			return instructionMapper.toInstructionDetail(instruction, savedVersion);
 		});
