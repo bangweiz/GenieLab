@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Instruction = require("../models/instruction.model");
 const InstructionVersion = require("../models/instructionVersion.model");
 const instructionMapper = require("../mappers/instruction.mapper");
-const { ERROR_CODE } = require("../constants/errorCode");
+const ERROR_CODE = require("../constants/errorCode");
 const GenieLabError = require("../utils/GenieLabError");
 
 /**
@@ -127,7 +127,36 @@ async function checkNameExist(name, organisationId, session = null) {
 	}
 }
 
+/**
+ * Get an instruction by ID with all its versions
+ * @param {string} instructionId - The ID of the instruction
+ * @param {string} organisationId - The ID of the organisation
+ * @returns {Promise<import("../types/instruction").InstructionInfo>}
+ */
+async function getInstruction(instructionId, organisationId) {
+	const instruction = await Instruction.findOne({
+		_id: instructionId,
+		organisation_id: organisationId,
+	});
+
+	if (!instruction) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+			[],
+			404,
+		);
+	}
+
+	const versions = await InstructionVersion.find({
+		instruction_id: instructionId,
+	}).sort({ version: -1 });
+
+	return instructionMapper.toInstructionWithAllVersions(instruction, versions);
+}
+
 module.exports = {
 	createInstruction,
 	updateInstruction,
+	getInstruction,
 };

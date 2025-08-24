@@ -30,4 +30,11 @@ router.put(
 	catchAsync(instructionController.updateInstruction),
 );
 
+router.get(
+	"/:instructionId",
+	auth,
+	role(ROLE.USER),
+	catchAsync(instructionController.getInstruction),
+);
+
 module.exports = router;

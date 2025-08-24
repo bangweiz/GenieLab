@@ -49,8 +49,28 @@ function toInstructionVersionEntity(instructionEntity, instructionData) {
 	};
 }
 
+/**
+ * @param {import("../types/instruction").InstructionEntity} instruction
+ * @param {import("../types/instruction").InstructionVersionEntity[]} instructionVersions
+ * @returns {import("../types/instruction").InstructionDetails}
+ */
+function toInstructionWithAllVersions(instruction, instructionVersions) {
+	return {
+		instructionId: instruction._id,
+		name: instruction.name,
+		type: instruction.type,
+		versions: instructionVersions.map((version) => ({
+			instructionVersionId: version._id,
+			version: version.version,
+			description: version.description,
+			content: version.content,
+		})),
+	};
+}
+
 module.exports = {
 	toInstructionDetail,
 	toInstructionEntity,
 	toInstructionVersionEntity,
+	toInstructionWithAllVersions,
 };
