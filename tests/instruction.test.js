@@ -178,6 +178,32 @@ describe("Instruction endpoints", () => {
 
 			expect(res.statusCode).toEqual(400);
 		});
+
+		it("should not update and return the same version if content and description are the same", async () => {
+			const updatedInstruction = {
+				content: instruction.versions[0].content,
+				description: instruction.versions[0].description,
+			};
+
+			const res = await request(app)
+				.put(`/api/instructions/${instruction.instructionId}`)
+				.set("Authorization", `Bearer ${token}`)
+				.send(updatedInstruction);
+
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.versions[0].version).toBe(1);
+			expect(res.body.versions.length).toBe(1);
+
+			const instructionInDb = await Instruction.findById(
+				instruction.instructionId,
+			);
+			expect(instructionInDb.latestVersion).toBe(1);
+
+			const instructionVersions = await InstructionVersion.find({
+				instruction_id: instruction.instructionId,
+			});
+			expect(instructionVersions.length).toBe(1);
+		});
 	});
 
 	describe("GET /api/instructions/:instructionId", () => {
