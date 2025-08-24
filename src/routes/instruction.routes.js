@@ -6,6 +6,7 @@ const { ROLE } = require("../constants/auth");
 const validate = require("../middlewares/validators/index");
 const {
 	createInstructionValidator,
+	updateInstructionValidator,
 } = require("../middlewares/validators/instructionValidator");
 const catchAsync = require("../utils/catchAsync");
 
@@ -18,6 +19,15 @@ router.post(
 	createInstructionValidator,
 	validate,
 	catchAsync(instructionController.createInstruction),
+);
+
+router.put(
+	"/:instructionId",
+	auth,
+	role(ROLE.ADMIN),
+	updateInstructionValidator,
+	validate,
+	catchAsync(instructionController.updateInstruction),
 );
 
 module.exports = router;

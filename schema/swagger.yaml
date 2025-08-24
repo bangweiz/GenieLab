@@ -277,10 +277,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    post:
+    put:
       summary: Update an instruction
-      description: Update an instruction
-      tags: [Instructions]
+      description: Update an instruction.
+      tags: [Instruction]
       parameters:
         - $ref: '#/components/parameters/instructionId'
       requestBody:
@@ -539,6 +539,7 @@ components:
           type: string
           description: Instruction description
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      minProperties: 1
   
     Error:
       type: object
