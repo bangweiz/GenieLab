@@ -14,6 +14,16 @@ async function createInstruction(req, res) {
 	res.status(201).json(instruction);
 }
 
+async function updateInstruction(req, res) {
+	const instruction = await instructionService.updateInstruction(
+		req.params.instructionId,
+		req.user.organisationId,
+		req.body,
+	);
+	res.status(200).json(instruction);
+}
+
 module.exports = {
 	createInstruction,
+	updateInstruction,
 };

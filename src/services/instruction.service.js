@@ -67,6 +67,67 @@ async function checkNameExist(name, organisationId, session = null) {
 	}
 }
 
+/**
+ * Update an instruction
+ * @param {string} instructionId - The ID of the instruction to update
+ * @param {string} organisationId - The ID of the organisation
+ * @param {import("../types/instruction").UpdateInstructionBody} instructionData - The instruction data
+ * @returns {Promise<import("../types/instruction").InstructionDetails>}
+ */
+async function updateInstruction(instructionId, organisationId, instructionData) {
+	const session = await mongoose.startSession();
+
+	try {
+		return await session.withTransaction(async () => {
+			const instruction = await Instruction.findOne(
+				{
+					_id: instructionId,
+					organisation_id: organisationId,
+				},
+				null,
+				{ session },
+			);
+
+			if (!instruction) {
+				throw new GenieLabError(
+					ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
+					ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+				);
+			}
+
+			const latestVersion = await InstructionVersion.findOne(
+				{
+					instruction_id: instructionId,
+				},
+				null,
+				{ sort: { version: -1 }, session },
+			);
+
+			if (instructionData.content) {
+				const newVersion = new InstructionVersion({
+					instruction_id: instructionId,
+					version: latestVersion.version + 1,
+					content: instructionData.content,
+					description: instructionData.description || latestVersion.description,
+				});
+				const savedVersion = await newVersion.save({ session });
+				instruction.latestVersion = savedVersion.version;
+				await instruction.save({ session });
+				return instructionMapper.toInstructionDetail(instruction, savedVersion);
+			}
+
+			if (instructionData.description) {
+				latestVersion.description = instructionData.description;
+			}
+			const savedVersion = await latestVersion.save({ session });
+			return instructionMapper.toInstructionDetail(instruction, savedVersion);
+		});
+	} finally {
+		session.endSession();
+	}
+}
+
 module.exports = {
 	createInstruction,
+	updateInstruction,
 };
