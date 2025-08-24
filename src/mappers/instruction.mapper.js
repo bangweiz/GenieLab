@@ -1,4 +1,5 @@
 /**
+ * Convert instruction entity and instruction version entity to instruction detail
  * @param {import("../types/instruction").InstructionEntity} instruction
  * @param {import("../types/instruction").InstructionVersionEntity} instructionVersion
  * @returns {import("../types/instruction").InstructionDetails}
@@ -8,19 +9,12 @@ function toInstructionDetail(instruction, instructionVersion) {
 		instructionId: instruction._id,
 		name: instruction.name,
 		type: instruction.type,
-		versions: [
-			{
-				instructionVersionId: instructionVersion._id,
-				version: instructionVersion.version,
-				description: instructionVersion.description,
-				content: instructionVersion.content,
-			},
-		],
+		versions: [toInstructionVersionInfo(instructionVersion)],
 	};
 }
 
 /**
- *
+ * Convert instruction creation data to instruction entity
  * @param {import("../types/instruction").CreateInstruction} instructionData
  * @param {string} organisationId
  * @returns {import("../types/instruction").InstructionEntity}
@@ -35,7 +29,7 @@ function toInstructionEntity(instructionData, organisationId) {
 }
 
 /**
- *
+ * Convert instruction creating data and instruction entity to instruction version entity
  * @param {import("../types/instruction").InstructionEntity} instructionEntity
  * @param {import("../types/instruction").CreateInstruction} instructionData
  * @returns {import("../types/instruction").InstructionVersionEntity}
@@ -49,8 +43,38 @@ function toInstructionVersionEntity(instructionEntity, instructionData) {
 	};
 }
 
+/**
+ * Convert instruction entity and instruction version entities to instruction details
+ * @param {import("../types/instruction").InstructionEntity} instruction
+ * @param {import("../types/instruction").InstructionVersionEntity[]} instructionVersions
+ * @returns {import("../types/instruction").InstructionDetails}
+ */
+function toInstructionWithAllVersions(instruction, instructionVersions) {
+	return {
+		instructionId: instruction._id,
+		name: instruction.name,
+		type: instruction.type,
+		versions: instructionVersions.map(toInstructionVersionInfo),
+	};
+}
+
+/**
+ * Convert instruction version entity to instruction version info
+ * @param {import("../types/instruction").InstructionVersionEntity} instructionVersionEntity
+ * @returns {import("../types/instruction").InstructionVersion}
+ */
+function toInstructionVersionInfo(instructionVersionEntity) {
+	return {
+		instructionVersionId: instructionVersionEntity._id,
+		version: instructionVersionEntity.version,
+		description: instructionVersionEntity.description,
+		content: instructionVersionEntity.content,
+	};
+}
+
 module.exports = {
 	toInstructionDetail,
 	toInstructionEntity,
 	toInstructionVersionEntity,
+	toInstructionWithAllVersions,
 };
