@@ -249,7 +249,7 @@ paths:
   /instructions/{instructionId}:
     get:
       summary: Get an instruction
-      tags: [Instructions]
+      tags: [Instruction]
       parameters:
         - $ref: '#/components/parameters/instructionId'
       responses:

@@ -131,7 +131,7 @@ async function checkNameExist(name, organisationId, session = null) {
  * Get an instruction by ID with all its versions
  * @param {string} instructionId - The ID of the instruction
  * @param {string} organisationId - The ID of the organisation
- * @returns {Promise<import("../types/instruction").InstructionInfo>}
+ * @returns {Promise<import("../types/instruction").InstructionDetails>}
  */
 async function getInstruction(instructionId, organisationId) {
 	const instruction = await Instruction.findOne({
