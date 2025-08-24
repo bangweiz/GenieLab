@@ -81,7 +81,18 @@ async function updateInstruction(instructionId, organisationId, instructionData)
 				{ sort: { version: -1 }, session },
 			);
 
-			if (instructionData.content) {
+			const isDescriptionSame =
+				!instructionData.description ||
+				latestVersion.description === instructionData.description;
+			const isContentSame =
+				!instructionData.content ||
+				latestVersion.content === instructionData.content;
+
+			if (isDescriptionSame && isContentSame) {
+				return instructionMapper.toInstructionDetail(instruction, latestVersion);
+			}
+
+			if (!isContentSame) {
 				const newVersion = new InstructionVersion({
 					instruction_id: instructionId,
 					version: latestVersion.version + 1,
