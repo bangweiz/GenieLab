@@ -15,21 +15,6 @@ async function createInstruction(req, res) {
 }
 
 /**
- * 
- * @param {import('express').Request<{ instructionId: string }, any, import('../types/instruction').UpdateInstruction> & { user: import('../types/user').UserInfo }} req - The request object with CreateOrganisation body
- * @param {import('express').Response} res - The response object
- * @returns {Promise<void>}
- */
-async function updateInstruction(req, res) {
-	const instruction = await instructionService.updateInstruction(
-		req.params.instructionId,
-		req.user.organisationId,
-		req.body,
-	);
-	res.status(200).json(instruction);
-}
-
-/**
  * Get an instruction by ID
  * @param {import('express').Request<{ instructionId: string }, any, any> & { user: import('../types/user').UserInfo }} req - The request object
  * @param {import('express').Response} res - The response object
@@ -45,6 +30,5 @@ async function getInstruction(req, res) {
 
 module.exports = {
 	createInstruction,
-	updateInstruction,
 	getInstruction,
 };
