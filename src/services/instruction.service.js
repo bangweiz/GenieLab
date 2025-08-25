@@ -150,9 +150,59 @@ async function getInstructionVersion(
 	return instructionMapper.toInstructionVersionInfo(instructionVersion);
 }
 
+/**
+ * Update a specific version of an instruction
+ * @param {string} instructionId - The ID of the instruction
+ * @param {string} instructionVersionId - The ID of the instruction version
+ * @param {string} organisationId - The ID of the organisation
+ * @param {import('../types/instruction').UpdateInstructionVersion} data - The data to update
+ * @returns {Promise<import("../types/instruction").InstructionVersionInfo>}
+ * */
+async function updateInstructionVersion(
+	instructionId,
+	instructionVersionId,
+	organisationId,
+	data,
+) {
+	const instruction = await Instruction.findOne({
+		_id: instructionId,
+		organisation_id: organisationId,
+	});
+
+	if (!instruction) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+			[],
+			404,
+		);
+	}
+
+	const instructionVersion = await InstructionVersion.findOneAndUpdate(
+		{
+			_id: instructionVersionId,
+			instruction_id: instructionId,
+		},
+		{ description: data.description },
+		{ new: true },
+	);
+
+	if (!instructionVersion) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_VERSION_NOT_FOUND.code,
+			ERROR_CODE.INSTRUCTION_VERSION_NOT_FOUND.message,
+			[],
+			404,
+		);
+	}
+
+	return instructionMapper.toInstructionVersionInfo(instructionVersion);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
 	getAllInstructions,
 	getInstructionVersion,
+	updateInstructionVersion,
 };
