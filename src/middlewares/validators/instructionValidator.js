@@ -42,7 +42,23 @@ const updateInstructionValidator = [
 		.withMessage("Description cannot be more than 500 characters"),
 ];
 
+const updateInstructionVersionValidator = [
+	body().custom((value) => {
+		if (Object.keys(value).length === 0) {
+			return false;
+		}
+		const allowedFields = ["description"];
+		return Object.keys(value).every((field) => allowedFields.includes(field));
+	}),
+	body("description")
+		.isString()
+		.withMessage("Description must be a string")
+		.isLength({ max: 500 })
+		.withMessage("Description cannot be more than 500 characters"),
+];
+
 module.exports = {
 	createInstructionValidator,
 	updateInstructionValidator,
+	updateInstructionVersionValidator,
 };

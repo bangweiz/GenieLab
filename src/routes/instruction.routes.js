@@ -6,6 +6,7 @@ const { ROLE } = require("../constants/auth");
 const validate = require("../middlewares/validators/index");
 const {
 	createInstructionValidator,
+	updateInstructionVersionValidator,
 } = require("../middlewares/validators/instructionValidator");
 const catchAsync = require("../utils/catchAsync");
 
@@ -39,6 +40,15 @@ router.get(
 	auth,
 	role(ROLE.USER),
 	catchAsync(instructionController.getInstructionVersion),
+);
+
+router.patch(
+	"/:instructionId/versions/:instructionVersionId",
+	auth,
+	role(ROLE.ADMIN),
+	updateInstructionVersionValidator,
+	validate,
+	catchAsync(instructionController.updateInstructionVersion),
 );
 
 module.exports = router;
