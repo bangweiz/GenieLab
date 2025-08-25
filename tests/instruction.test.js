@@ -162,6 +162,123 @@ describe("Instruction endpoints", () => {
 		});
 	});
 
+	describe("GET /api/instructions/:instructionId/versions/:instructionVersionId", () => {
+		let token,
+			instruction,
+			instructionId,
+			instructionVersion1,
+			instructionVersionId1;
+
+		beforeEach(async () => {
+			const org = await new Organisation({ name: "Test Org" }).save();
+			const organisationId = org._id.toString();
+
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash("password", salt);
+
+			const user = new User({
+				username: "testuser",
+				email: "testuser@test.com",
+				password: hashedPassword,
+				organisation_id: organisationId,
+				role: "user",
+			});
+			await user.save();
+
+			const resLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "testuser@test.com", password: "password" });
+			token = resLogin.body.token;
+
+			instruction = new Instruction({
+				name: "Test Instruction",
+				type: "personality",
+				organisation_id: organisationId,
+				latestVersion: 2,
+			});
+			await instruction.save();
+			instructionId = instruction._id.toString();
+
+			instructionVersion1 = new InstructionVersion({
+				instruction_id: instructionId,
+				version: 1,
+				content: "This is version 1",
+				description: "Description for version 1",
+			});
+			await instructionVersion1.save();
+			instructionVersionId1 = instructionVersion1._id.toString();
+
+			const instructionVersion2 = new InstructionVersion({
+				instruction_id: instructionId,
+				version: 2,
+				content: "This is version 2",
+				description: "Description for version 2",
+			});
+			await instructionVersion2.save();
+		});
+
+		it("should return the specific version of the instruction", async () => {
+			const res = await request(app)
+				.get(
+					`/api/instructions/${instructionId}/versions/${instructionVersionId1}`,
+				)
+				.set("Authorization", `Bearer ${token}`);
+
+			expect(res.statusCode).toEqual(200);
+			expect(res.body).toHaveProperty("instructionVersionId");
+			expect(res.body.version).toBe(1);
+			expect(res.body.content).toBe("This is version 1");
+		});
+
+		it("should return 404 if instruction is not found", async () => {
+			const res = await request(app)
+				.get(
+					`/api/instructions/60f6e1b9b5f3c1a9c8b4b6d4/versions/${instructionVersionId1}`,
+				)
+				.set("Authorization", `Bearer ${token}`);
+
+			expect(res.statusCode).toEqual(404);
+		});
+
+		it("should return 404 if version is not found", async () => {
+			const res = await request(app)
+				.get(
+					`/api/instructions/${instructionId}/versions/60f6e1b9b5f3c1a9c8b4b6d4`,
+				)
+				.set("Authorization", `Bearer ${token}`);
+
+			expect(res.statusCode).toEqual(404);
+		});
+
+		it("should return 404 if user from another org tries to access", async () => {
+			// Create another org and user
+			const anotherOrg = await new Organisation({ name: "Another Org" }).save();
+			const anotherOrganisationId = anotherOrg._id.toString();
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash("password", salt);
+			const anotherUser = new User({
+				username: "anotheruser",
+				email: "anotheruser@test.com",
+				password: hashedPassword,
+				organisation_id: anotherOrganisationId,
+				role: "user",
+			});
+			await anotherUser.save();
+			const resAnotherLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "anotheruser@test.com", password: "password" });
+			const anotherToken = resAnotherLogin.body.token;
+
+			const res = await request(app)
+				.get(
+					`/api/instructions/${instructionId}/versions/${instructionVersionId1}`,
+				)
+				.set("Authorization", `Bearer ${anotherToken}`);
+
+			expect(res.statusCode).toEqual(404);
+		});
+	});
+
 	describe("GET /api/instructions", () => {
 		let token, organisationId;
 

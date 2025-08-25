@@ -41,8 +41,24 @@ async function getAllInstructions(req, res) {
 	res.status(200).json(instructions);
 }
 
+/**
+ * Get a specific version of an instruction
+ * @param {import('express').Request<{ instructionId: string, instructionVersionId: string }, any, any> & { user: import('../types/user').UserInfo }} req - The request object
+ * @param {import('express').Response} res - The response object
+ * @returns {Promise<void>}
+ * */
+async function getInstructionVersion(req, res) {
+	const instructionVersion = await instructionService.getInstructionVersion(
+		req.params.instructionId,
+		req.params.instructionVersionId,
+		req.user.organisationId,
+	);
+	res.status(200).json(instructionVersion);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
 	getAllInstructions,
+	getInstructionVersion,
 };

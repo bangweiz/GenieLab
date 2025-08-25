@@ -28,6 +28,13 @@ router.get(
 );
 
 router.get(
+	"/:instructionId/versions/:instructionVersionId",
+	auth,
+	role(ROLE.USER),
+	catchAsync(instructionController.getInstructionVersion),
+);
+
+router.get(
 	"/",
 	auth,
 	role(ROLE.USER),
