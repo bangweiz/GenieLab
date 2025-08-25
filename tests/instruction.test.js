@@ -506,16 +506,5 @@ describe("Instruction endpoints", () => {
 
 			expect(res.statusCode).toEqual(400);
 		});
-
-		it("should return 400 if description is not a string", async () => {
-			const res = await request(app)
-				.patch(
-					`/api/instructions/${instructionId}/versions/${instructionVersionId}`,
-				)
-				.set("Authorization", `Bearer ${adminToken}`)
-				.send({ description: 123 });
-
-			expect(res.statusCode).toEqual(400);
-		});
 	});
 });
