@@ -95,7 +95,20 @@ async function getInstruction(instructionId, organisationId) {
 	return instructionMapper.toInstructionWithAllVersions(instruction, versions);
 }
 
+/**
+ * Get all instructions for an organisation
+ * @param {string} organisationId - The ID of the organisation
+ * @returns {Promise<import("../types/instruction").InstructionInfoList>}
+ */
+async function getAllInstructions(organisationId) {
+	const instructions = await Instruction.find({
+		organisation_id: organisationId,
+	});
+	return instructionMapper.toInstructionInfoList(instructions);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
+	getAllInstructions,
 };

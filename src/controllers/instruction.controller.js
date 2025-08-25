@@ -28,7 +28,21 @@ async function getInstruction(req, res) {
 	res.status(200).json(instruction);
 }
 
+/**
+ * Get all instructions
+ * @param {import('express').Request<any, any, any> & { user: import('../types/user').UserInfo }} req - The request object
+ * @param {import('express').Response} res - The response object
+ * @returns {Promise<void>}
+ * */
+async function getAllInstructions(req, res) {
+	const instructions = await instructionService.getAllInstructions(
+		req.user.organisationId,
+	);
+	res.status(200).json(instructions);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
+	getAllInstructions,
 };

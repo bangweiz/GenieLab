@@ -185,6 +185,8 @@ paths:
     get:
       summary: Get all instructions
       tags: [Instruction]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -290,7 +292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionVersionInfo'
+                $ref: '#/components/schemas/InstructionVersion'
         '400':
           description: Validation error
           content:
@@ -331,7 +333,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionVersionInfo'
+                $ref: '#/components/schemas/InstructionVersion'
         '400':
           description: Validation error
           content:
@@ -518,7 +520,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/InstructionInfo'
-    InstructionVersionInfo:
+    InstructionVersion:
       type: object
       required:
         - instructionVersionId
@@ -542,7 +544,7 @@ components:
           type: string
           description: Instruction content
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    InstructionVersionInfoList:
+    InstructionVersionList:
       type: array
       items:
         $ref: '#/components/schemas/InstructionVersion'

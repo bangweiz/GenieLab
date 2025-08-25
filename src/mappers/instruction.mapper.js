@@ -72,9 +72,32 @@ function toInstructionVersionInfo(instructionVersionEntity) {
 	};
 }
 
+/**
+ * Convert instruction version entity to instruction info
+ * @param {import("../types/instruction").InstructionEntity} instructionEntity
+ * @returns {import("../types/instruction").InstructionInfo}
+ */
+function toInstructionInfo(instructionEntity) {
+	return {
+		instructionId: instructionEntity._id,
+		name: instructionEntity.name,
+		type: instructionEntity.type,
+	};
+}
+
+/**
+ * Convert instruction entities to instruction info list
+ * @param {import("../types/instruction").InstructionEntity[]} instructionEntities
+ * @returns {import("../types/instruction").InstructionInfoList}
+ * */
+function toInstructionInfoList(instructionEntities) {
+	return instructionEntities.map(toInstructionInfo);
+}
+
 module.exports = {
 	toInstructionDetail,
 	toInstructionEntity,
 	toInstructionVersionEntity,
 	toInstructionWithAllVersions,
+	toInstructionInfoList,
 };

@@ -4,726 +4,792 @@
  */
 
 export interface paths {
-	"/auth/login": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * User login
-		 * @description Authenticate a user and receive a JWT token
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UserLogin"];
-				};
-			};
-			responses: {
-				/** @description Successful login */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Token"];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Invalid credentials */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/users": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get all users
-		 * @description Retrieve a list of all users (root role required)
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description A list of users */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserInfo"][];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create a new user
-		 * @description Create a new user (root role required)
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateUser"];
-				};
-			};
-			responses: {
-				/** @description User created successfully */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserInfo"];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/users/{userId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get a specific user
-		 * @description Retrieve details of a specific user by ID (root role required)
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					userId: components["parameters"]["userId"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description User details */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserInfo"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description User not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/organisations": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Create a new organisation
-		 * @description Create a new organisation with a root user
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateOrganisation"];
-				};
-			};
-			responses: {
-				/** @description Organisation and root user created successfully */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							organisation?: components["schemas"]["Organisation"];
-							user?: components["schemas"]["UserInfo"];
-						};
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/instructions": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Get all instructions */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description OK */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["InstructionInfoList"][];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/** Create a new instruction */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["CreateInstruction"];
-				};
-			};
-			responses: {
-				/** @description The created instruction */
-				201: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["InstructionDetails"];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/instructions/{instructionId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Get an instruction */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					instructionId: components["parameters"]["instructionId"];
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Success */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["InstructionDetails"];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Update an instruction
-		 * @description Update an instruction
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					instructionId: components["parameters"]["instructionId"];
-				};
-				cookie?: never;
-			};
-			requestBody: {
-				content: {
-					"application/json": components["schemas"]["UpdateInstruction"];
-				};
-			};
-			responses: {
-				/** @description Success */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["InstructionDetails"];
-					};
-				};
-				/** @description Validation error */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Unauthorized */
-				401: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-				/** @description Forbidden - insufficient permissions */
-				403: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["Error"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
+    "/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * User login
+         * @description Authenticate a user and receive a JWT token
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserLogin"];
+                };
+            };
+            responses: {
+                /** @description Successful login */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Token"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Invalid credentials */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all users
+         * @description Retrieve a list of all users (root role required)
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserInfo"][];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create a new user
+         * @description Create a new user (root role required)
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateUser"];
+                };
+            };
+            responses: {
+                /** @description User created successfully */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserInfo"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get a specific user
+         * @description Retrieve details of a specific user by ID (root role required)
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: components["parameters"]["userId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description User details */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserInfo"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/organisations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a new organisation
+         * @description Create a new organisation with a root user
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateOrganisation"];
+                };
+            };
+            responses: {
+                /** @description Organisation and root user created successfully */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            organisation?: components["schemas"]["Organisation"];
+                            user?: components["schemas"]["UserInfo"];
+                        };
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/instructions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all instructions */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InstructionInfoList"][];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Create a new instruction */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CreateInstruction"];
+                };
+            };
+            responses: {
+                /** @description The created instruction */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InstructionDetails"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/instructions/{instructionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get an instruction */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    instructionId: components["parameters"]["instructionId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InstructionDetails"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/instructions/{instructionId}/version/{versionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get an instruction version */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    instructionId: components["parameters"]["instructionVersionId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InstructionVersion"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        /**
+         * Update an instruction version
+         * @description Update an instruction version.
+         */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    instructionId: components["parameters"]["instructionVersionId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InstructionVersion"];
+                    };
+                };
+                /** @description Validation error */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden - insufficient permissions */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-	schemas: {
-		Token: {
-			/**
-			 * @description JWT token
-			 * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-			 */
-			token: string;
-		};
-		UserLogin: {
-			/**
-			 * Format: email
-			 * @description User email
-			 * @example johndoe@example.com
-			 */
-			email: string;
-			/**
-			 * Format: password
-			 * @description User password
-			 * @example password123
-			 */
-			password: string;
-		};
-		UserInfo: {
-			/** @example 5f8d0d55b547644294b9e7f8 */
-			id: string;
-			/** @example johndoe */
-			username: string;
-			/**
-			 * Format: email
-			 * @example johndoe@example.com
-			 */
-			email: string;
-			/** @example 5f8d0d55b547644294b9e7f9 */
-			organisationId: string;
-			/**
-			 * @example user
-			 * @enum {string}
-			 */
-			role: "root" | "admin" | "user";
-		};
-		CreateUser: {
-			/**
-			 * @description User username
-			 * @example johndoe
-			 */
-			username: string;
-			/**
-			 * Format: email
-			 * @description User email
-			 * @example johndoe@example.com
-			 */
-			email: string;
-			/**
-			 * @description User password
-			 * @example <PASSWORD>
-			 */
-			password: string;
-			/**
-			 * @description User role
-			 * @example admin
-			 */
-			role: string;
-		};
-		Organisation: {
-			/** @example 5f8d0d55b547644294b9e7f9 */
-			id: string;
-			/** @example Acme Corporation */
-			name: string;
-		};
-		CreateOrganisation: {
-			/**
-			 * @description Organisation name
-			 * @example Acme Corporation
-			 */
-			organisationName: string;
-			/**
-			 * @description User username
-			 * @example johndoe
-			 */
-			username: string;
-			/**
-			 * Format: email
-			 * @description User email
-			 * @example johndoe@example.com
-			 */
-			email: string;
-			/**
-			 * @description User password
-			 * @example <PASSWORD>
-			 */
-			password: string;
-		};
-		InstructionInfo: {
-			/**
-			 * Format: uuid
-			 * @example 5f8d0d55b547644294b9e7f8
-			 */
-			instructionId: string;
-			/**
-			 * @description Instruction name
-			 * @example My Instruction
-			 */
-			name: string;
-			/**
-			 * @description Instruction type
-			 * @enum {string}
-			 */
-			type: "personality" | "guardian" | "operation";
-		};
-		InstructionDetails: components["schemas"]["InstructionInfo"] & {
-			versions: components["schemas"]["InstructionVersionList"];
-		};
-		InstructionInfoList: components["schemas"]["InstructionInfo"][];
-		InstructionVersion: {
-			/**
-			 * @description Instruction version id
-			 * @example 1
-			 */
-			instructionVersionId: string;
-			/**
-			 * @description Instruction version
-			 * @example 1
-			 */
-			version: number;
-			/**
-			 * @description Instruction description
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			description: string;
-			/**
-			 * @description Instruction content
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			content: string;
-		};
-		InstructionVersionList: components["schemas"]["InstructionVersion"][];
-		CreateInstruction: {
-			/**
-			 * @description Instruction name
-			 * @example My Instruction
-			 */
-			name: string;
-			/**
-			 * @description Instruction content
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			content: string;
-			/**
-			 * @description Instruction type
-			 * @enum {string}
-			 */
-			type: "personality" | "guardian" | "operation";
-			/**
-			 * @description Instruction description
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			description?: string;
-		};
-		UpdateInstruction: {
-			/**
-			 * @description Instruction content
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			content?: string;
-			/**
-			 * @description Instruction description
-			 * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-			 */
-			description?: string;
-		};
-		Error: {
-			/** @example Error description */
-			message: string;
-			/** @example [
-			 *       "Field is required"
-			 *     ] */
-			errors?: string[];
-		};
-	};
-	responses: never;
-	parameters: {
-		userId: string;
-		instructionId: string;
-	};
-	requestBodies: never;
-	headers: never;
-	pathItems: never;
+    schemas: {
+        Token: {
+            /**
+             * @description JWT token
+             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+             */
+            token: string;
+        };
+        UserLogin: {
+            /**
+             * Format: email
+             * @description User email
+             * @example johndoe@example.com
+             */
+            email: string;
+            /**
+             * Format: password
+             * @description User password
+             * @example password123
+             */
+            password: string;
+        };
+        UserInfo: {
+            /** @example 5f8d0d55b547644294b9e7f8 */
+            id: string;
+            /** @example johndoe */
+            username: string;
+            /**
+             * Format: email
+             * @example johndoe@example.com
+             */
+            email: string;
+            /** @example 5f8d0d55b547644294b9e7f9 */
+            organisationId: string;
+            /**
+             * @example user
+             * @enum {string}
+             */
+            role: "root" | "admin" | "user";
+        };
+        CreateUser: {
+            /**
+             * @description User username
+             * @example johndoe
+             */
+            username: string;
+            /**
+             * Format: email
+             * @description User email
+             * @example johndoe@example.com
+             */
+            email: string;
+            /**
+             * @description User password
+             * @example <PASSWORD>
+             */
+            password: string;
+            /**
+             * @description User role
+             * @example admin
+             */
+            role: string;
+        };
+        Organisation: {
+            /** @example 5f8d0d55b547644294b9e7f9 */
+            id: string;
+            /** @example Acme Corporation */
+            name: string;
+        };
+        CreateOrganisation: {
+            /**
+             * @description Organisation name
+             * @example Acme Corporation
+             */
+            organisationName: string;
+            /**
+             * @description User username
+             * @example johndoe
+             */
+            username: string;
+            /**
+             * Format: email
+             * @description User email
+             * @example johndoe@example.com
+             */
+            email: string;
+            /**
+             * @description User password
+             * @example <PASSWORD>
+             */
+            password: string;
+        };
+        InstructionInfo: {
+            /**
+             * Format: uuid
+             * @example 5f8d0d55b547644294b9e7f8
+             */
+            instructionId: string;
+            /**
+             * @description Instruction name
+             * @example My Instruction
+             */
+            name: string;
+            /**
+             * @description Instruction type
+             * @enum {string}
+             */
+            type: "personality" | "guardian" | "operation";
+        };
+        InstructionDetails: components["schemas"]["InstructionInfo"] & {
+            versions: components["schemas"]["InstructionVersionList"];
+        };
+        InstructionInfoList: components["schemas"]["InstructionInfo"][];
+        InstructionVersion: {
+            /**
+             * @description Instruction version id
+             * @example 1
+             */
+            instructionVersionId: string;
+            /**
+             * @description Instruction version
+             * @example 1
+             */
+            version: number;
+            /**
+             * @description Instruction description
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            description: string;
+            /**
+             * @description Instruction content
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            content: string;
+        };
+        InstructionVersionList: components["schemas"]["InstructionVersion"][];
+        CreateInstruction: {
+            /**
+             * @description Instruction name
+             * @example My Instruction
+             */
+            name: string;
+            /**
+             * @description Instruction content
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            content: string;
+            /**
+             * @description Instruction type
+             * @enum {string}
+             */
+            type: "personality" | "guardian" | "operation";
+            /**
+             * @description Instruction description
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            description?: string;
+        };
+        UpdateInstruction: {
+            /**
+             * @description Instruction content
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            content?: string;
+            /**
+             * @description Instruction description
+             * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+             */
+            description?: string;
+        };
+        Error: {
+            /** @example Error description */
+            message: string;
+            /** @example [
+             *       "Field is required"
+             *     ] */
+            errors?: string[];
+        };
+    };
+    responses: never;
+    parameters: {
+        userId: string;
+        instructionId: string;
+        instructionVersionId: string;
+    };
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;
