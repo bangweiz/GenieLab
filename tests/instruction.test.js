@@ -161,4 +161,106 @@ describe("Instruction endpoints", () => {
 			expect(res.statusCode).toEqual(404);
 		});
 	});
+
+	describe("GET /api/instructions", () => {
+		let token, organisationId;
+
+		beforeEach(async () => {
+			const org = await new Organisation({ name: "Test Org" }).save();
+			organisationId = org._id.toString();
+
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash("password", salt);
+
+			const user = new User({
+				username: "testuser",
+				email: "testuser@test.com",
+				password: hashedPassword,
+				organisation_id: organisationId,
+				role: "user",
+			});
+			await user.save();
+
+			const resLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "testuser@test.com", password: "password" });
+			token = resLogin.body.token;
+
+			// We need an admin to create the instructions first
+			const adminUser = new User({
+				username: "adminuser",
+				email: "adminuser@test.com",
+				password: hashedPassword,
+				organisation_id: organisationId,
+				role: "admin",
+			});
+			await adminUser.save();
+			const resAdminLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "adminuser@test.com", password: "password" });
+			const adminToken = resAdminLogin.body.token;
+
+			const instruction1 = {
+				name: "Test Instruction 1",
+				content: "This is a test instruction 1.",
+				type: "personality",
+				description: "This is a test description 1.",
+			};
+			const instruction2 = {
+				name: "Test Instruction 2",
+				content: "This is a test instruction 2.",
+				type: "guardian",
+				description: "This is a test description 2.",
+			};
+
+			await request(app)
+				.post("/api/instructions")
+				.set("Authorization", `Bearer ${adminToken}`)
+				.send(instruction1);
+			await request(app)
+				.post("/api/instructions")
+				.set("Authorization", `Bearer ${adminToken}`)
+				.send(instruction2);
+		});
+
+		it("should return all instructions for the organisation", async () => {
+			const res = await request(app)
+				.get("/api/instructions")
+				.set("Authorization", `Bearer ${token}`);
+
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(2);
+			expect(res.body[0].name).toBe("Test Instruction 1");
+			expect(res.body[1].name).toBe("Test Instruction 2");
+		});
+
+		it("should return an empty array if no instructions", async () => {
+			// Create another org and user with no instructions
+			const anotherOrg = await new Organisation({
+				name: "Another Org",
+			}).save();
+			const anotherOrganisationId = anotherOrg._id.toString();
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash("password", salt);
+			const anotherUser = new User({
+				username: "anotheruser",
+				email: "anotheruser@test.com",
+				password: hashedPassword,
+				organisation_id: anotherOrganisationId,
+				role: "user",
+			});
+			await anotherUser.save();
+			const resAnotherLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "anotheruser@test.com", password: "password" });
+			const anotherToken = resAnotherLogin.body.token;
+
+			const res = await request(app)
+				.get("/api/instructions")
+				.set("Authorization", `Bearer ${anotherToken}`);
+
+			expect(res.statusCode).toEqual(200);
+			expect(res.body.length).toBe(0);
+		});
+	});
 });

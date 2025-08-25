@@ -25,6 +25,7 @@ export type UpdateInstruction = components["schemas"]["UpdateInstruction"];
 export type InstructionInfo = components["schemas"]["InstructionInfo"];
 export type InstructionInfoList = components["schemas"]["InstructionInfoList"];
 export type InstructionDetails = components["schemas"]["InstructionDetails"];
-export type InstructionVersion = components["schemas"]["InstructionVersion"];
-export type InstructionVersionList =
-	components["schemas"]["InstructionVersionList"];
+export type InstructionVersionInfo =
+	components["schemas"]["InstructionVersionInfo"];
+export type InstructionVersionInfoList =
+	components["schemas"]["InstructionVersionInfoList"];

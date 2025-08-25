@@ -185,6 +185,8 @@ paths:
     get:
       summary: Get all instructions
       tags: [Instruction]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: OK
@@ -513,7 +515,7 @@ components:
             - versions
           properties:
             versions:
-              $ref: '#/components/schemas/InstructionVersionList'
+              $ref: '#/components/schemas/InstructionVersionInfoList'
     InstructionInfoList:
       type: array
       items:
@@ -545,7 +547,7 @@ components:
     InstructionVersionInfoList:
       type: array
       items:
-        $ref: '#/components/schemas/InstructionVersion'
+        $ref: '#/components/schemas/InstructionVersionInfo'
     CreateInstruction: 
       type: object
       required:

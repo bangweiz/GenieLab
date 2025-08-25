@@ -27,4 +27,11 @@ router.get(
 	catchAsync(instructionController.getInstruction),
 );
 
+router.get(
+	"/",
+	auth,
+	role(ROLE.USER),
+	catchAsync(instructionController.getAllInstructions),
+);
+
 module.exports = router;
