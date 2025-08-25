@@ -65,7 +65,11 @@ async function createOrganisationAndRootUser({
  * @returns {Promise<void>}
  */
 async function checkOrganisationNameExists(organisationName, session = null) {
-	const organisation = await Organisation.findOne({ name: organisationName }, null, { session });
+	const organisation = await Organisation.findOne(
+		{ name: organisationName },
+		null,
+		{ session },
+	);
 	if (organisation) {
 		throw new GenieLabError(
 			ERROR_CODE.ORG_NAME_EXIST.code,

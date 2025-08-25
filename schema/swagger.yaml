@@ -277,25 +277,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    put:
-      summary: Update an instruction
-      description: Update an instruction.
+  /instructions/{instructionId}/version/{versionId}:
+    get:
+      summary: Get an instruction version
       tags: [Instruction]
       parameters:
         - $ref: '#/components/parameters/instructionId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateInstruction'
+        - $ref: '#/components/parameters/instructionVersionId'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionDetails'
+                $ref: '#/components/schemas/InstructionVersionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update an instruction version
+      description: Update an instruction version.
+      tags: [Instruction]
+      parameters:
+        - $ref: '#/components/parameters/instructionId'
+        - $ref: '#/components/parameters/instructionVersionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            properties:
+              - description:
+                required: true
+                type: string
+                example: "This is an instruction"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionVersionInfo'
         '400':
           description: Validation error
           content:
@@ -315,7 +351,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-
 components:
   parameters:
     userId:
@@ -325,6 +360,12 @@ components:
       schema:
         type: string
     instructionId:
+      in: path
+      name: instructionId
+      required: true
+      schema:
+        type: string
+    instructionVersionId:
       in: path
       name: instructionId
       required: true
@@ -477,7 +518,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/InstructionInfo'
-    InstructionVersion:
+    InstructionVersionInfo:
       type: object
       required:
         - instructionVersionId
@@ -501,7 +542,7 @@ components:
           type: string
           description: Instruction content
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    InstructionVersionList:
+    InstructionVersionInfoList:
       type: array
       items:
         $ref: '#/components/schemas/InstructionVersion'
