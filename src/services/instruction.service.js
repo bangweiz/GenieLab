@@ -107,8 +107,52 @@ async function getAllInstructions(organisationId) {
 	return instructionMapper.toInstructionInfoList(instructions);
 }
 
+/**
+ * Get a specific version of an instruction
+ * @param {string} instructionId - The ID of the instruction
+ * @param {string} instructionVersionId - The ID of the instruction version
+ * @param {string} organisationId - The ID of the organisation
+ * @returns {Promise<import("../types/instruction").InstructionVersionInfo>}
+ * */
+async function getInstructionVersion(
+	instructionId,
+	instructionVersionId,
+	organisationId,
+) {
+	const instruction = await Instruction.findOne({
+		_id: instructionId,
+		organisation_id: organisationId,
+	});
+
+	if (!instruction) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
+			ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+			[],
+			404,
+		);
+	}
+
+	const instructionVersion = await InstructionVersion.findOne({
+		_id: instructionVersionId,
+		instruction_id: instructionId,
+	});
+
+	if (!instructionVersion) {
+		throw new GenieLabError(
+			ERROR_CODE.INSTRUCTION_VERSION_NOT_FOUND.code,
+			ERROR_CODE.INSTRUCTION_VERSION_NOT_FOUND.message,
+			[],
+			404,
+		);
+	}
+
+	return instructionMapper.toInstructionVersionInfo(instructionVersion);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
 	getAllInstructions,
+	getInstructionVersion,
 };

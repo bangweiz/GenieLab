@@ -11,6 +11,13 @@ const catchAsync = require("../utils/catchAsync");
 
 const router = express.Router();
 
+router.get(
+	"/",
+	auth,
+	role(ROLE.USER),
+	catchAsync(instructionController.getAllInstructions),
+);
+
 router.post(
 	"/",
 	auth,
@@ -28,10 +35,10 @@ router.get(
 );
 
 router.get(
-	"/",
+	"/:instructionId/versions/:instructionVersionId",
 	auth,
 	role(ROLE.USER),
-	catchAsync(instructionController.getAllInstructions),
+	catchAsync(instructionController.getInstructionVersion),
 );
 
 module.exports = router;

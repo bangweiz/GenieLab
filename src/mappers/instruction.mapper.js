@@ -100,4 +100,5 @@ module.exports = {
 	toInstructionVersionEntity,
 	toInstructionWithAllVersions,
 	toInstructionInfoList,
+	toInstructionVersionInfo,
 };

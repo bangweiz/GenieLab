@@ -43,6 +43,10 @@ const ERROR_CODE = {
 		code: "INSTRUCTION_NOT_FOUND",
 		message: "Instruction not found",
 	},
+	INSTRUCTION_VERSION_NOT_FOUND: {
+		code: "INSTRUCTION_VERSION_NOT_FOUND",
+		message: "Instruction version not found",
+	},
 };
 
 module.exports = ERROR_CODE;
