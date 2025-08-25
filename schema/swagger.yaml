@@ -279,7 +279,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /instructions/{instructionId}/version/{versionId}:
+  /instructions/{instructionId}/version/{instructionVersionId}:
     get:
       summary: Get an instruction version
       tags: [Instruction]
