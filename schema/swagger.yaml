@@ -292,7 +292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionVersion'
+                $ref: '#/components/schemas/InstructionVersionInfo'
         '400':
           description: Validation error
           content:
@@ -333,7 +333,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstructionVersion'
+                $ref: '#/components/schemas/InstructionVersionInfo'
         '400':
           description: Validation error
           content:
@@ -515,12 +515,12 @@ components:
             - versions
           properties:
             versions:
-              $ref: '#/components/schemas/InstructionVersionList'
+              $ref: '#/components/schemas/InstructionVersionInfoList'
     InstructionInfoList:
       type: array
       items:
         $ref: '#/components/schemas/InstructionInfo'
-    InstructionVersion:
+    InstructionVersionInfo:
       type: object
       required:
         - instructionVersionId
@@ -544,10 +544,10 @@ components:
           type: string
           description: Instruction content
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    InstructionVersionList:
+    InstructionVersionInfoList:
       type: array
       items:
-        $ref: '#/components/schemas/InstructionVersion'
+        $ref: '#/components/schemas/InstructionVersionInfo'
     CreateInstruction: 
       type: object
       required:

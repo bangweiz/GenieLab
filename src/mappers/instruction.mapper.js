@@ -61,7 +61,7 @@ function toInstructionWithAllVersions(instruction, instructionVersions) {
 /**
  * Convert instruction version entity to instruction version info
  * @param {import("../types/instruction").InstructionVersionEntity} instructionVersionEntity
- * @returns {import("../types/instruction").InstructionVersion}
+ * @returns {import("../types/instruction").InstructionVersionInfo}
  */
 function toInstructionVersionInfo(instructionVersionEntity) {
 	return {

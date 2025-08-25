@@ -503,7 +503,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["InstructionVersion"];
+                        "application/json": components["schemas"]["InstructionVersionInfo"];
                     };
                 };
                 /** @description Validation error */
@@ -560,7 +560,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["InstructionVersion"];
+                        "application/json": components["schemas"]["InstructionVersionInfo"];
                     };
                 };
                 /** @description Validation error */
@@ -712,10 +712,10 @@ export interface components {
             type: "personality" | "guardian" | "operation";
         };
         InstructionDetails: components["schemas"]["InstructionInfo"] & {
-            versions: components["schemas"]["InstructionVersionList"];
+            versions: components["schemas"]["InstructionVersionInfoList"];
         };
         InstructionInfoList: components["schemas"]["InstructionInfo"][];
-        InstructionVersion: {
+        InstructionVersionInfo: {
             /**
              * @description Instruction version id
              * @example 1
@@ -737,7 +737,7 @@ export interface components {
              */
             content: string;
         };
-        InstructionVersionList: components["schemas"]["InstructionVersion"][];
+        InstructionVersionInfoList: components["schemas"]["InstructionVersionInfo"][];
         CreateInstruction: {
             /**
              * @description Instruction name
