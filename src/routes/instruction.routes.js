@@ -7,6 +7,7 @@ const validate = require("../middlewares/validators/index");
 const {
 	createInstructionValidator,
 	updateInstructionVersionValidator,
+	createInstructionVersionValidator,
 } = require("../middlewares/validators/instructionValidator");
 const catchAsync = require("../utils/catchAsync");
 
@@ -49,6 +50,15 @@ router.patch(
 	updateInstructionVersionValidator,
 	validate,
 	catchAsync(instructionController.updateInstructionVersion),
+);
+
+router.post(
+	"/:instructionId/versions",
+	auth,
+	role(ROLE.ADMIN),
+	createInstructionVersionValidator,
+	validate,
+	catchAsync(instructionController.createInstructionVersion),
 );
 
 module.exports = router;

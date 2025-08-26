@@ -30,7 +30,22 @@ const updateInstructionVersionValidator = [
 		.withMessage("Description cannot be more than 500 characters"),
 ];
 
+const createInstructionVersionValidator = [
+	body("content")
+		.notEmpty()
+		.withMessage("Content is required")
+		.isLength({ min: 3, max: 5000 })
+		.withMessage("Content must be between 3 and 5000 characters"),
+	body("description")
+		.optional()
+		.isString()
+		.withMessage("Description must be a string")
+		.isLength({ max: 500 })
+		.withMessage("Description cannot be more than 500 characters"),
+];
+
 module.exports = {
 	createInstructionValidator,
 	updateInstructionVersionValidator,
+	createInstructionVersionValidator,
 };

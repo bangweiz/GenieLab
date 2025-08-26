@@ -610,6 +610,8 @@ components:
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     CreateInstructionVersion:
       type: object
+      required:
+        - content
       properties:
         content:
           type: string

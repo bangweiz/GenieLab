@@ -834,7 +834,7 @@ export interface components {
              * @description Instruction content
              * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
              */
-            content?: string;
+            content: string;
             /**
              * @description Instruction description
              * @example Lorem ipsum dolor sit amet, consectetur adipiscing elit.
