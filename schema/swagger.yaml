@@ -279,7 +279,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /instructions/{instructionId}/version/{instructionVersionId}:
+  /instructions/{instructionId}/versions:
+    post:
+      summary: Create a new instruction version
+      tags: [Instruction]
+      parameters:
+        - $ref: '#/components/parameters/instructionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInstructionVersion'
+      responses:
+        '201':
+          description: The created instruction version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionVersionInfo'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /instructions/{instructionId}/versions/{instructionVersionId}:
     get:
       summary: Get an instruction version
       tags: [Instruction]
@@ -571,7 +608,7 @@ components:
           type: string
           description: Instruction description
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    UpdateInstruction:
+    CreateInstructionVersion:
       type: object
       properties:
         content:
@@ -582,7 +619,6 @@ components:
           type: string
           description: Instruction description
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      minProperties: 1
   
     Error:
       type: object
