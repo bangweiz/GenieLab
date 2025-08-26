@@ -94,6 +94,26 @@ function toInstructionInfoList(instructionEntities) {
 	return instructionEntities.map(toInstructionInfo);
 }
 
+/**
+ * Convert instruction entity and instruction version creation data to instruction version entity
+ * @param {import("../types/instruction").InstructionEntity} instructionEntity
+ * @param {number} newVersion
+ * @param {import("../types/instruction").CreateInstructionVersion} instructionData
+ * @returns {import("../types/instruction").InstructionVersionEntity}
+ * */
+function toInstructionVersionEntityFromInstruction(
+	instructionEntity,
+	newVersion,
+	instructionData,
+) {
+	return {
+		instruction_id: instructionEntity._id,
+		version: newVersion,
+		content: instructionData.content,
+		description: instructionData.description,
+	};
+}
+
 module.exports = {
 	toInstructionDetail,
 	toInstructionEntity,
@@ -101,4 +121,5 @@ module.exports = {
 	toInstructionWithAllVersions,
 	toInstructionInfoList,
 	toInstructionVersionInfo,
+	toInstructionVersionEntityFromInstruction,
 };

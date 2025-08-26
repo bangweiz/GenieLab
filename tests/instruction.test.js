@@ -507,4 +507,128 @@ describe("Instruction endpoints", () => {
 			expect(res.statusCode).toEqual(400);
 		});
 	});
+
+	describe("POST /api/instructions/:instructionId/versions", () => {
+		let adminToken,
+			userToken,
+			instructionId,
+			organisationId;
+
+		beforeEach(async () => {
+			const org = await new Organisation({ name: "Test Org" }).save();
+			organisationId = org._id.toString();
+
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash("password", salt);
+
+			const adminUser = new User({
+				username: "adminuser",
+				email: "adminuser@test.com",
+				password: hashedPassword,
+				organisation_id: organisationId,
+				role: "admin",
+			});
+			await adminUser.save();
+
+			const resAdminLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "adminuser@test.com", password: "password" });
+			adminToken = resAdminLogin.body.token;
+
+			const user = new User({
+				username: "testuser",
+				email: "testuser@test.com",
+				password: hashedPassword,
+				organisation_id: organisationId,
+				role: "user",
+			});
+			await user.save();
+
+			const resUserLogin = await request(app)
+				.post("/api/auth/login")
+				.send({ email: "testuser@test.com", password: "password" });
+			userToken = resUserLogin.body.token;
+
+			const instruction = new Instruction({
+				name: "Test Instruction",
+				type: "personality",
+				organisation_id: organisationId,
+				latestVersion: 1,
+			});
+			await instruction.save();
+			instructionId = instruction._id.toString();
+
+			const instructionVersion = new InstructionVersion({
+				instruction_id: instructionId,
+				version: 1,
+				content: "This is version 1",
+				description: "Description for version 1",
+			});
+			await instructionVersion.save();
+		});
+
+		it("should create a new instruction version", async () => {
+			const newVersion = {
+				content: "This is version 2",
+				description: "Description for version 2",
+			};
+
+			const res = await request(app)
+				.post(`/api/instructions/${instructionId}/versions`)
+				.set("Authorization", `Bearer ${adminToken}`)
+				.send(newVersion);
+
+			expect(res.statusCode).toEqual(201);
+			expect(res.body).toHaveProperty("instructionVersionId");
+			expect(res.body.version).toBe(2);
+			expect(res.body.content).toBe(newVersion.content);
+			expect(res.body.description).toBe(newVersion.description);
+
+			const instruction = await Instruction.findById(instructionId);
+			expect(instruction.latestVersion).toBe(2);
+
+			const instructionVersion = await InstructionVersion.findById(
+				res.body.instructionVersionId,
+			);
+			expect(instructionVersion.version).toBe(2);
+			expect(instructionVersion.content).toBe(newVersion.content);
+		});
+
+		it("should return 403 if user is not an admin", async () => {
+			const newVersion = {
+				content: "This is version 2",
+				description: "Description for version 2",
+			};
+
+			const res = await request(app)
+				.post(`/api/instructions/${instructionId}/versions`)
+				.set("Authorization", `Bearer ${userToken}`)
+				.send(newVersion);
+
+			expect(res.statusCode).toEqual(403);
+		});
+
+		it("should return 404 if instruction is not found", async () => {
+			const newVersion = {
+				content: "This is version 2",
+				description: "Description for version 2",
+			};
+
+			const res = await request(app)
+				.post(`/api/instructions/60f6e1b9b5f3c1a9c8b4b6d4/versions`)
+				.set("Authorization", `Bearer ${adminToken}`)
+				.send(newVersion);
+
+			expect(res.statusCode).toEqual(404);
+		});
+
+		it("should return 400 if request body is invalid", async () => {
+			const res = await request(app)
+				.post(`/api/instructions/${instructionId}/versions`)
+				.set("Authorization", `Bearer ${adminToken}`)
+				.send({ description: "invalid field" });
+
+			expect(res.statusCode).toEqual(400);
+		});
+	});
 });

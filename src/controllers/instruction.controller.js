@@ -72,10 +72,26 @@ async function updateInstructionVersion(req, res) {
 	res.status(200).json(instructionVersion);
 }
 
+/**
+ * Create a new version for an instruction
+ * @param {import('express').Request<{ instructionId: string }, any, import('../types/instruction').CreateInstructionVersion> & { user: import('../types/user').UserInfo }} req - The request object
+ * @param {import('express').Response} res - The response object
+ * @returns {Promise<void>}
+ * */
+async function createInstructionVersion(req, res) {
+	const instructionVersion = await instructionService.createInstructionVersion(
+		req.params.instructionId,
+		req.user.organisationId,
+		req.body,
+	);
+	res.status(201).json(instructionVersion);
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
 	getAllInstructions,
 	getInstructionVersion,
 	updateInstructionVersion,
+	createInstructionVersion,
 };

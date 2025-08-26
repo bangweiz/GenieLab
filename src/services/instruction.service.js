@@ -199,10 +199,64 @@ async function updateInstructionVersion(
 	return instructionMapper.toInstructionVersionInfo(instructionVersion);
 }
 
+/**
+ * Create a new version for an instruction
+ * @param {string} instructionId - The ID of the instruction
+ * @param {string} organisationId - The ID of the organisation
+ * @param {import('../types/instruction').CreateInstructionVersion} data - The data for the new version
+ * @returns {Promise<import("../types/instruction").InstructionVersionInfo>}
+ * */
+async function createInstructionVersion(instructionId, organisationId, data) {
+	const session = await mongoose.startSession();
+
+	try {
+		return await session.withTransaction(async () => {
+			const instruction = await Instruction.findOne(
+				{
+					_id: instructionId,
+					organisation_id: organisationId,
+				},
+				null,
+				{ session },
+			);
+
+			if (!instruction) {
+				throw new GenieLabError(
+					ERROR_CODE.INSTRUCTION_NOT_FOUND.code,
+					ERROR_CODE.INSTRUCTION_NOT_FOUND.message,
+					[],
+					404,
+				);
+			}
+
+			const newVersion = instruction.latestVersion + 1;
+
+			const instructionVersion = new InstructionVersion(
+				instructionMapper.toInstructionVersionEntityFromInstruction(
+					instruction,
+					newVersion,
+					data,
+				),
+			);
+			const savedInstructionVersion = await instructionVersion.save({
+				session,
+			});
+
+			instruction.latestVersion = newVersion;
+			await instruction.save({ session });
+
+			return instructionMapper.toInstructionVersionInfo(savedInstructionVersion);
+		});
+	} finally {
+		session.endSession();
+	}
+}
+
 module.exports = {
 	createInstruction,
 	getInstruction,
 	getAllInstructions,
 	getInstructionVersion,
 	updateInstructionVersion,
+	createInstructionVersion,
 };
