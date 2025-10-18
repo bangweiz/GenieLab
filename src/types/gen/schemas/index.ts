@@ -9,4 +9,4 @@
 export * from "./createOrganisationRequest";
 export * from "./loginRequest";
 export * from "./organisationResponse";
-export * from './loginResponse';
+export * from "./loginResponse";

@@ -5,22 +5,22 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import type { LoginRequest } from './loginRequest';
+import type { LoginRequest } from "./loginRequest";
 
 export interface CreateOrganisationRequest {
-  /**
-   * The name of the organisation
-   * @minLength 1
-   * @maxLength 100
-   */
-  name: string;
-  /** The phone number of the organisation */
-  phone: string;
-  /**
-   * The address of the organisation
-   * @minLength 10
-   * @maxLength 100
-   */
-  address: string;
-  rootUser: LoginRequest;
+	/**
+	 * The name of the organisation
+	 * @minLength 1
+	 * @maxLength 100
+	 */
+	name: string;
+	/** The phone number of the organisation */
+	phone: string;
+	/**
+	 * The address of the organisation
+	 * @minLength 10
+	 * @maxLength 100
+	 */
+	address: string;
+	rootUser: LoginRequest;
 }

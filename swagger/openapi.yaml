@@ -13,7 +13,7 @@ tags:
   - name: organisation-management
 
 paths:
-  /login:
+  /auth/login:
     post:
       description: Login to an organisation
       summary: Login to an organisation

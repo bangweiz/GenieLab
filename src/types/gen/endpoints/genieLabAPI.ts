@@ -5,8 +5,7 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from 'zod';
-
+import * as zod from "zod";
 
 /**
  * Login to an organisation
@@ -15,29 +14,44 @@ import * as zod from 'zod';
 export const postLoginBodyPasswordMin = 6;
 
 export const postLoginBody = zod.object({
-  "email": zod.email().describe('The email of the root user'),
-  "password": zod.string().min(postLoginBodyPasswordMin).describe('The password of the root user')
-})
+	email: zod.email().describe("The email of the root user"),
+	password: zod
+		.string()
+		.min(postLoginBodyPasswordMin)
+		.describe("The password of the root user"),
+});
 
 export const postLoginResponse = zod.object({
-  "token": zod.string().describe('The JWT token'),
-  "expiration": zod.string().describe('The expiration date of the JWT token')
-})
-
+	token: zod.string().describe("The JWT token"),
+	expiration: zod.string().describe("The expiration date of the JWT token"),
+});
 
 /**
  * Create an organisation and a root user
  * @summary Create an organisation
  */
-export const postOrganisationBodyNameMax = 100;export const postOrganisationBodyAddressMin = 10;
-export const postOrganisationBodyAddressMax = 100;export const postOrganisationBodyRootUserPasswordMin = 6;
+export const postOrganisationBodyNameMax = 100;
+export const postOrganisationBodyAddressMin = 10;
+export const postOrganisationBodyAddressMax = 100;
+export const postOrganisationBodyRootUserPasswordMin = 6;
 
 export const postOrganisationBody = zod.object({
-  "name": zod.string().min(1).max(postOrganisationBodyNameMax).describe('The name of the organisation'),
-  "phone": zod.string().describe('The phone number of the organisation'),
-  "address": zod.string().min(postOrganisationBodyAddressMin).max(postOrganisationBodyAddressMax).describe('The address of the organisation'),
-  "rootUser": zod.object({
-  "email": zod.email().describe('The email of the root user'),
-  "password": zod.string().min(postOrganisationBodyRootUserPasswordMin).describe('The password of the root user')
-})
-})
+	name: zod
+		.string()
+		.min(1)
+		.max(postOrganisationBodyNameMax)
+		.describe("The name of the organisation"),
+	phone: zod.string().describe("The phone number of the organisation"),
+	address: zod
+		.string()
+		.min(postOrganisationBodyAddressMin)
+		.max(postOrganisationBodyAddressMax)
+		.describe("The address of the organisation"),
+	rootUser: zod.object({
+		email: zod.email().describe("The email of the root user"),
+		password: zod
+			.string()
+			.min(postOrganisationBodyRootUserPasswordMin)
+			.describe("The password of the root user"),
+	}),
+});
