@@ -6,12 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface LoginRequest {
-  /** The email of the root user */
-  email: string;
-  /**
-   * The password of the root user
-   * @minLength 6
-   */
-  password: string;
+export interface LoginResponse {
+  /** The JWT token */
+  token: string;
+  /** The expiration date of the JWT token */
+  expiration: string;
 }
