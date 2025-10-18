@@ -23,10 +23,11 @@ export async function verifyPassword(
 
 export async function createToken(
 	email: string,
+	userId: string,
 	role: Role,
 	organisationId: string,
 ): Promise<LoginResponse> {
-	const token = await new SignJWT({ email, role, organisationId })
+	const token = await new SignJWT({ email, userId, role, organisationId })
 		.setProtectedHeader({ alg: "HS256" })
 		.setIssuedAt()
 		.setExpirationTime(ONE_HOUR)

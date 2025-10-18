@@ -41,5 +41,10 @@ export async function login(
 		throw new HTTPException(401, { message: "Invalid credentials" });
 	}
 
-	return authUtils.createToken(email, user.role, user.organisation.toString());
+	return authUtils.createToken(
+		email,
+		user._id.toString(),
+		user.role,
+		user.organisation.toString(),
+	);
 }
