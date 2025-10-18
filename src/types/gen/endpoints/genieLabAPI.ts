@@ -8,6 +8,25 @@
 import * as zod from "zod";
 
 /**
+ * Login to an organisation
+ * @summary Login to an organisation
+ */
+export const postLoginBodyPasswordMin = 6;
+
+export const postLoginBody = zod.object({
+	email: zod.email().describe("The email of the root user"),
+	password: zod
+		.string()
+		.min(postLoginBodyPasswordMin)
+		.describe("The password of the root user"),
+});
+
+export const postLoginResponse = zod.object({
+	token: zod.string().describe("The JWT token"),
+	expiration: zod.string().describe("The expiration date of the JWT token"),
+});
+
+/**
  * Create an organisation and a root user
  * @summary Create an organisation
  */

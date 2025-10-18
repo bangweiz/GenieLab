@@ -6,7 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export * from "./createOrganisationRequest";
-export * from "./loginRequest";
-export * from "./organisationResponse";
-export * from "./loginResponse";
+export interface LoginResponse {
+	/** The JWT token */
+	token: string;
+	/** The expiration date of the JWT token */
+	expiration: string;
+}
