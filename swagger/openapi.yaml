@@ -11,6 +11,7 @@ servers:
 tags:
   - name: auth-management
   - name: organisation-management
+  - name: instruction-management
 
 paths:
   /auth/login:
@@ -56,8 +57,100 @@ paths:
                 $ref: '#/components/schemas/OrganisationResponse'
         '400':
           description: Invalid input
+  
+  /organisation/:organisationId/instructions:
+    get:
+      description: Get all instructions with their latest versions
+      summary: Get all instructions
+      tags:
+        - instruction-management
+      responses:
+        '200':
+          description: The instructions successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionListResponse'
+    post:
+      description: Create an instruction and its first version
+      summary: Create an instruction
+      tags:
+        - instruction-management
+      parameters:
+        - $ref: '#/components/parameters/organisationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInstructionRequest'
+      responses:
+        '201':
+          description: The instruction successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionResponse'
+        '400':
+          description: Invalid input
+  /organisation/:organisationId/instructions/:instructionId:
+    get:
+      description: Get an instruction with its versions
+      summary: Get an instruction
+      tags:
+        - instruction-management
+      parameters:
+        - $ref: '#/components/parameters/organisationId'
+        - $ref: '#/components/parameters/instructionId'
+      responses:
+        '200':
+          description: The instruction successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionResponse'
+    put:
+      description: Update an instruction
+      summary: Update an instruction
+      tags:
+        - instruction-management
+      parameters:
+        - $ref: '#/components/parameters/organisationId'
+        - $ref: '#/components/parameters/instructionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInstructionRequest'
+      responses:
+        '200':
+          description: The instruction successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstructionResponse'
+        '400':
+          description: Invalid input
 
 components:
+  parameters:
+    organisationId:
+      in: path
+      name: organisationId
+      description: The unique identifier of the organisation
+      required: true
+      schema:
+        type: string
+        example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
+    instructionId:
+      in: path
+      name: instructionId
+      description: The unique identifier of the instruction
+      required: true
+      schema:
+        type: string
+        example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
   schemas:
     CreateOrganisationRequest:
       type: object
@@ -139,3 +232,157 @@ components:
           type: string
           description: The expiration date of the JWT token
           example: 2023-01-01T00:00:00.000Z
+    CreateInstructionRequest:
+      type: object
+      required:
+        - name
+        - description
+        - type
+        - content
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The name of the instruction
+          example: Generate a python script
+        description:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: The description of the instruction
+          example: Generate a python script that generates a random number
+        type:
+          type: string
+          enum:
+            - Personality
+            - Procedure
+            - Guardian
+          description: The type of the instruction
+          example: Procedure
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: The content of the instruction
+          example: Generate a python script that generates a random number
+    UpdateInstructionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The name of the instruction
+          example: Generate a python script
+        description:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: The description of the instruction
+          example: Generate a python script that generates a random number
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: The content of the instruction
+          example: Generate a python script that generates a random number
+    InstructionResponse:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - type
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the instruction
+          example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
+        name:
+          type: string
+          description: The name of the instruction
+          example: Generate a python script
+        description:
+          type: string
+          description: The description of the instruction
+          example: Generate a python script that generates a random number
+        type:
+          type: string
+          enum:
+            - Personality
+            - Procedure
+            - Guardian
+          description: The type of the instruction
+          example: Procedure
+        latestVersion:
+          $ref: '#/components/schemas/InstructionVersionResponse'
+    InstructionListResponse:
+      type: object
+      required:
+        - items
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstructionResponse'
+          description: The list of instructions
+        total:
+          type: integer
+          description: The total number of instructions
+          example: 10
+    InstructionDetailResponse:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - type
+        - versions
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the instruction
+          example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
+        name:
+          type: string
+          description: The name of the instruction
+          example: Generate a python script
+        description:
+          type: string
+          description: The description of the instruction
+          example: Generate a python script that generates a random number
+        type:
+          type: string
+          enum:
+            - Personality
+            - Procedure
+            - Guardian
+          description: The type of the instruction
+          example: Procedure
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstructionVersionResponse'
+          description: The versions of the instruction
+    InstructionVersionResponse:
+      type: object
+      required:
+        - id
+        - version
+        - content
+      properties:
+        id: 
+          type: string
+          description: The unique identifier of the instruction version
+          example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
+        version:
+          type: integer
+          description: The version of the instruction
+          example: 1
+        content:
+          type: string
+          description: The content of the instruction
+          example: Generate a python script that generates a random number
+        
