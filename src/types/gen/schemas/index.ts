@@ -6,7 +6,16 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from "./createInstructionRequest";
+export * from "./createInstructionRequestType";
 export * from "./createOrganisationRequest";
+export * from "./instructionDetailResponse";
+export * from "./instructionDetailResponseType";
+export * from "./instructionListResponse";
+export * from "./instructionResponse";
+export * from "./instructionResponseType";
+export * from "./instructionVersionResponse";
 export * from "./loginRequest";
-export * from "./organisationResponse";
 export * from "./loginResponse";
+export * from "./organisationResponse";
+export * from "./updateInstructionRequest";

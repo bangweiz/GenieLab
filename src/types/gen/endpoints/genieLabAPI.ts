@@ -11,17 +11,17 @@ import * as zod from "zod";
  * Login to an organisation
  * @summary Login to an organisation
  */
-export const postLoginBodyPasswordMin = 6;
+export const postAuthLoginBodyPasswordMin = 6;
 
-export const postLoginBody = zod.object({
+export const postAuthLoginBody = zod.object({
 	email: zod.email().describe("The email of the root user"),
 	password: zod
 		.string()
-		.min(postLoginBodyPasswordMin)
+		.min(postAuthLoginBodyPasswordMin)
 		.describe("The password of the root user"),
 });
 
-export const postLoginResponse = zod.object({
+export const postAuthLoginResponse = zod.object({
 	token: zod.string().describe("The JWT token"),
 	expiration: zod.string().describe("The expiration date of the JWT token"),
 });
@@ -55,3 +55,163 @@ export const postOrganisationBody = zod.object({
 			.describe("The password of the root user"),
 	}),
 });
+
+/**
+ * Get all instructions with their latest versions
+ * @summary Get all instructions
+ */
+export const getOrganisationOrganisationIdInstructionsResponse = zod.object({
+	items: zod
+		.array(
+			zod.object({
+				id: zod.string().describe("The unique identifier of the instruction"),
+				name: zod.string().describe("The name of the instruction"),
+				description: zod
+					.string()
+					.describe("The description of the instruction"),
+				type: zod
+					.enum(["Personality", "Procedure", "Guardian"])
+					.describe("The type of the instruction"),
+				latestVersion: zod
+					.object({
+						id: zod
+							.string()
+							.describe("The unique identifier of the instruction version"),
+						version: zod.number().describe("The version of the instruction"),
+						content: zod.string().describe("The content of the instruction"),
+					})
+					.optional(),
+			}),
+		)
+		.describe("The list of instructions"),
+	total: zod.number().describe("The total number of instructions"),
+});
+
+/**
+ * Create an instruction and its first version
+ * @summary Create an instruction
+ */
+export const postOrganisationOrganisationIdInstructionsParams = zod.object({
+	organisationId: zod
+		.string()
+		.describe("The unique identifier of the organisation"),
+});
+
+export const postOrganisationOrganisationIdInstructionsBodyNameMax = 100;
+export const postOrganisationOrganisationIdInstructionsBodyDescriptionMax = 1000;
+export const postOrganisationOrganisationIdInstructionsBodyContentMax = 5000;
+
+export const postOrganisationOrganisationIdInstructionsBody = zod.object({
+	name: zod
+		.string()
+		.min(1)
+		.max(postOrganisationOrganisationIdInstructionsBodyNameMax)
+		.describe("The name of the instruction"),
+	description: zod
+		.string()
+		.min(1)
+		.max(postOrganisationOrganisationIdInstructionsBodyDescriptionMax)
+		.describe("The description of the instruction"),
+	type: zod
+		.enum(["Personality", "Procedure", "Guardian"])
+		.describe("The type of the instruction"),
+	content: zod
+		.string()
+		.min(1)
+		.max(postOrganisationOrganisationIdInstructionsBodyContentMax)
+		.describe("The content of the instruction"),
+});
+
+/**
+ * Get an instruction with its versions
+ * @summary Get an instruction
+ */
+export const getOrganisationOrganisationIdInstructionsInstructionIdParams =
+	zod.object({
+		organisationId: zod
+			.string()
+			.describe("The unique identifier of the organisation"),
+		instructionId: zod
+			.string()
+			.describe("The unique identifier of the instruction"),
+	});
+
+export const getOrganisationOrganisationIdInstructionsInstructionIdResponse =
+	zod.object({
+		id: zod.string().describe("The unique identifier of the instruction"),
+		name: zod.string().describe("The name of the instruction"),
+		description: zod.string().describe("The description of the instruction"),
+		type: zod
+			.enum(["Personality", "Procedure", "Guardian"])
+			.describe("The type of the instruction"),
+		latestVersion: zod
+			.object({
+				id: zod
+					.string()
+					.describe("The unique identifier of the instruction version"),
+				version: zod.number().describe("The version of the instruction"),
+				content: zod.string().describe("The content of the instruction"),
+			})
+			.optional(),
+	});
+
+/**
+ * Update an instruction
+ * @summary Update an instruction
+ */
+export const putOrganisationOrganisationIdInstructionsInstructionIdParams =
+	zod.object({
+		organisationId: zod
+			.string()
+			.describe("The unique identifier of the organisation"),
+		instructionId: zod
+			.string()
+			.describe("The unique identifier of the instruction"),
+	});
+
+export const putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax = 100;
+export const putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax = 1000;
+export const putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax = 5000;
+
+export const putOrganisationOrganisationIdInstructionsInstructionIdBody =
+	zod.object({
+		name: zod
+			.string()
+			.min(1)
+			.max(putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax)
+			.optional()
+			.describe("The name of the instruction"),
+		description: zod
+			.string()
+			.min(1)
+			.max(
+				putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax,
+			)
+			.optional()
+			.describe("The description of the instruction"),
+		content: zod
+			.string()
+			.min(1)
+			.max(putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax)
+			.optional()
+			.describe("The content of the instruction"),
+	});
+
+export const putOrganisationOrganisationIdInstructionsInstructionIdResponse =
+	zod.object({
+		id: zod.string().describe("The unique identifier of the instruction"),
+		name: zod.string().describe("The name of the instruction"),
+		description: zod.string().describe("The description of the instruction"),
+		type: zod
+			.enum(["Personality", "Procedure", "Guardian"])
+			.describe("The type of the instruction"),
+		latestVersion: zod
+			.object({
+				id: zod
+					.string()
+					.describe("The unique identifier of the instruction version"),
+				version: zod.number().describe("The version of the instruction"),
+				content: zod.string().describe("The content of the instruction"),
+			})
+			.optional(),
+	});
