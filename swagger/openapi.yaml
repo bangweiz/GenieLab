@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Genie Lab API
+  version: 1.0.0
+  description: A simple, minimal API for managing an ai agent.
+
+servers:
+  - url: http://localhost:3000/v1
+    description: Local development server
+
+paths:
+  /organisation:
+    post:
+      description: Create an organisation and a root user
+      summary: Create an organisation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganisationRequest'
+      responses:
+        '201':
+          description: The organisation and the root user successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationResponse'
+        '400':
+          description: Invalid input
+
+components:
+  schemas:
+    CreateOrganisationRequest:
+      type: object
+      required:
+        - name
+        - phone
+        - address
+        - rootUser
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: The name of the organisation
+          example: Acme Corp
+        phone:
+          type: string
+          description: The phone number of the organisation
+          example: 0412345678
+        address:
+          type: string
+          minLength: 10
+          maxLength: 100
+          description: The address of the organisation
+          example: 10 example st, Brisbane
+        rootUser:
+          $ref: '#/components/schemas/LoginRequest'
+    OrganisationResponse:
+      type: object
+      required:
+        - id
+        - name
+        - phone
+        - address
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the organisation
+          example: 58c4012e-37eb-4b62-bbf8-8d6c0b7e6de6
+        name:
+          type: string
+          description: The name of the organisation
+          example: Acme Corp
+        phone:
+          type: string
+          description: The phone number of the organisation
+          example: 0412345678
+        address:
+          type: string
+          description: The address of the organisation
+          example: 10 example st, Brisbane
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: The email of the root user
+          example: lisa@example.com
+        password:
+          type: string
+          minLength: 6
+          description: The password of the root user
+          example: 123456
