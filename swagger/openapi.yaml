@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: Genie Lab API
   version: 1.0.0
@@ -8,11 +8,39 @@ servers:
   - url: http://localhost:3000/v1
     description: Local development server
 
+tags:
+  - name: auth-management
+  - name: organisation-management
+
 paths:
+  /login:
+    post:
+      description: Login to an organisation
+      summary: Login to an organisation
+      tags:
+        - auth-management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: The user successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Invalid input
+
   /organisation:
     post:
       description: Create an organisation and a root user
       summary: Create an organisation
+      tags:
+        - organisation-management
       requestBody:
         required: true
         content:
@@ -97,3 +125,17 @@ components:
           minLength: 6
           description: The password of the root user
           example: 123456
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - expiration
+      properties:
+        token:
+          type: string
+          description: The JWT token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQss
+        expiration:
+          type: string
+          description: The expiration date of the JWT token
+          example: 2023-01-01T00:00:00.000Z
