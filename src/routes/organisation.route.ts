@@ -5,6 +5,7 @@ import { postOrganisationBody } from "../types/gen/endpoints/genieLabAPI";
 import * as organisationService from "../services/organisation.service";
 import * as userService from "../services/user.service";
 import { Role } from "../constants/auth";
+import transactionMiddleware from "../middlewares/transaction";
 
 const organisationRoute = new Hono().basePath("/organisations");
 
@@ -15,6 +16,7 @@ organisationRoute.get("/test", (c) => {
 organisationRoute.post(
 	"/",
 	zValidator("json", postOrganisationBody),
+	transactionMiddleware,
 	async (c) => {
 		const {
 			name,
