@@ -24,4 +24,19 @@ instructionRoute.post(
 	},
 );
 
+instructionRoute.get(
+	"/organisations/:organisationId/instructions/:instructionId",
+	async (c) => {
+		const organisationId = c.req.param("organisationId");
+		const instructionId = c.req.param("instructionId");
+
+		const instruction = await instructionService.getInstruction(
+			instructionId,
+			organisationId,
+		);
+
+		return c.json(instruction);
+	},
+);
+
 export default instructionRoute;
