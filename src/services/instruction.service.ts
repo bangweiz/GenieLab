@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { HTTPException } from "hono/http-exception";
 
 import Instruction from "../schemas/instruction.schema";
@@ -9,8 +8,7 @@ import { CreateInstructionRequest } from "../types/gen/schemas";
 export async function createInstruction(
 	instruction: CreateInstructionRequest,
 	organisationId: string,
-): Promise<InstructionResponse> {	
-
+): Promise<InstructionResponse> {
 	const existingInstruction = await Instruction.exists({
 		where: {
 			name: instruction.name,
