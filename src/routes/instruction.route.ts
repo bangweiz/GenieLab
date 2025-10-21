@@ -4,10 +4,10 @@ import { zValidator } from "@hono/zod-validator";
 import { postOrganisationOrganisationIdInstructionsBody } from "../types/gen/endpoints/genieLabAPI";
 import * as instructionService from "../services/instruction.service";
 
-const instructionRoute = new Hono().basePath("/organisation");
+const instructionRoute = new Hono().basePath("");
 
 instructionRoute.post(
-	"/:organisationId/instructions",
+	"/organisations/:organisationId/instructions",
 	zValidator("json", postOrganisationOrganisationIdInstructionsBody),
 	async (c) => {
 		const organisationId = c.req.param("organisationId");
