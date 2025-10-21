@@ -6,7 +6,7 @@ import * as organisationService from "../services/organisation.service";
 import * as userService from "../services/user.service";
 import { Role } from "../constants/auth";
 
-const organisationRoute = new Hono().basePath("/organisation");
+const organisationRoute = new Hono().basePath("/organisations");
 
 organisationRoute.get("/test", (c) => {
 	return c.text("Org route works!");
