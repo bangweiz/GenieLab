@@ -4,8 +4,11 @@ import { zValidator } from "@hono/zod-validator";
 import { postOrganisationOrganisationIdInstructionsBody } from "../types/gen/endpoints/genieLabAPI";
 import * as instructionService from "../services/instruction.service";
 import transactionMiddleware from "../middlewares/transaction";
+import mongoose from "mongoose";
 
-const instructionRoute = new Hono().basePath("");
+const instructionRoute = new Hono<{
+	Variables: { session: mongoose.mongo.ClientSession | null };
+}>();
 
 instructionRoute.post(
 	"/organisations/:organisationId/instructions",
@@ -14,10 +17,12 @@ instructionRoute.post(
 	async (c) => {
 		const organisationId = c.req.param("organisationId");
 		const instructionData = c.req.valid("json");
+		const session = c.get("session");
 
 		const createdInstruction = await instructionService.createInstruction(
 			instructionData,
 			organisationId,
+			session,
 		);
 
 		return c.json(createdInstruction, 201);

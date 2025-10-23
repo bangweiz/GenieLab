@@ -7,23 +7,25 @@ import {
 	InstructionDetailResponse,
 } from "../types/gen/schemas";
 import { CreateInstructionRequest } from "../types/gen/schemas";
+import mongoose from "mongoose";
 
 export async function createInstruction(
 	instruction: CreateInstructionRequest,
 	organisationId: string,
+	session: mongoose.mongo.ClientSession | null,
 ): Promise<InstructionResponse> {
 	const existingInstruction = await Instruction.exists({
 		where: {
 			name: instruction.name,
 			organisationId,
 		},
-	});
+	}).session(session);
 
 	if (existingInstruction !== null) {
 		throw new HTTPException(409, { message: "Conflicts" });
 	}
 
-	const savedInstruction = await Instruction.create({
+	const newInstruction = new Instruction({
 		name: instruction.name,
 		description: instruction.description,
 		type: instruction.type,
@@ -31,11 +33,15 @@ export async function createInstruction(
 		organisation: organisationId,
 	});
 
-	const savedInstructionVersion = await InstructionVersion.create({
+	const savedInstruction = await newInstruction.save({ session });
+
+	const instructionVersion = new InstructionVersion({
 		content: instruction.content,
 		version: 1,
 		parent: savedInstruction._id,
 	});
+
+	const savedInstructionVersion = await instructionVersion.save({ session });
 
 	return {
 		id: savedInstruction._id.toString(),

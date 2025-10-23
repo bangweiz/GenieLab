@@ -15,4 +15,5 @@ async function transactionMiddleware(c: Context, next: Next) {
 		session.endSession();
 	}
 }
+
 export default transactionMiddleware;
