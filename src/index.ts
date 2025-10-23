@@ -5,7 +5,9 @@ import instructionRoute from "./routes/instruction.route";
 import connectDB from "./config/db";
 import { errorHandler } from "./middlewares/errorHandler";
 
-connectDB();
+if (Bun.env.NODE_ENV !== "test") {
+	connectDB();
+}
 
 const app = new Hono();
 

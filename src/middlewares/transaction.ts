@@ -15,4 +15,9 @@ async function transactionMiddleware(c: Context, next: Next) {
 		session.endSession();
 	}
 }
+
+export type SessionVariable = {
+	session: mongoose.mongo.ClientSession | null;
+};
+
 export default transactionMiddleware;
