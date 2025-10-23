@@ -3,11 +3,12 @@ import { zValidator } from "@hono/zod-validator";
 
 import { postOrganisationOrganisationIdInstructionsBody } from "../types/gen/endpoints/genieLabAPI";
 import * as instructionService from "../services/instruction.service";
-import transactionMiddleware from "../middlewares/transaction";
-import mongoose from "mongoose";
+import transactionMiddleware, {
+	SessionVariable,
+} from "../middlewares/transaction";
 
 const instructionRoute = new Hono<{
-	Variables: { session: mongoose.mongo.ClientSession | null };
+	Variables: SessionVariable;
 }>();
 
 instructionRoute.post(
