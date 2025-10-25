@@ -9,12 +9,12 @@
 /**
  * The type of the instruction
  */
-export type InstructionInfoType =
-	(typeof InstructionInfoType)[keyof typeof InstructionInfoType];
+export type InstructionInfoType = typeof InstructionInfoType[keyof typeof InstructionInfoType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InstructionInfoType = {
-	Personality: "Personality",
-	Procedure: "Procedure",
-	Guardian: "Guardian",
+  Personality: 'Personality',
+  Procedure: 'Procedure',
+  Guardian: 'Guardian',
 } as const;

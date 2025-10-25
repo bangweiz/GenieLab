@@ -7,22 +7,22 @@
  */
 
 export interface UpdateInstructionRequest {
-	/**
-	 * The name of the instruction
-	 * @minLength 1
-	 * @maxLength 100
-	 */
-	name?: string;
-	/**
-	 * The description of the instruction
-	 * @minLength 1
-	 * @maxLength 1000
-	 */
-	description?: string;
-	/**
-	 * The content of the instruction
-	 * @minLength 1
-	 * @maxLength 5000
-	 */
-	content?: string;
+  /**
+   * The name of the instruction
+   * @minLength 1
+   * @maxLength 100
+   */
+  name?: string;
+  /**
+   * The description of the instruction
+   * @minLength 1
+   * @maxLength 1000
+   */
+  description?: string;
+  /**
+   * The content of the instruction
+   * @minLength 1
+   * @maxLength 5000
+   */
+  content?: string;
 }

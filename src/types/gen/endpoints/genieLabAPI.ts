@@ -5,7 +5,8 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import * as zod from "zod";
+import * as zod from 'zod';
+
 
 /**
  * Login to an organisation
@@ -14,196 +15,119 @@ import * as zod from "zod";
 export const postAuthLoginBodyPasswordMin = 6;
 
 export const postAuthLoginBody = zod.object({
-	email: zod.email().describe("The email of the root user"),
-	password: zod
-		.string()
-		.min(postAuthLoginBodyPasswordMin)
-		.describe("The password of the root user"),
-});
+  "email": zod.email().describe('The email of the root user'),
+  "password": zod.string().min(postAuthLoginBodyPasswordMin).describe('The password of the root user')
+})
 
 export const postAuthLoginResponse = zod.object({
-	token: zod.string().describe("The JWT token"),
-	expiration: zod.string().describe("The expiration date of the JWT token"),
-});
+  "token": zod.string().describe('The JWT token'),
+  "expiration": zod.string().describe('The expiration date of the JWT token')
+})
+
 
 /**
  * Create an organisation and a root user
  * @summary Create an organisation
  */
-export const postOrganisationBodyNameMax = 100;
-export const postOrganisationBodyAddressMin = 10;
-export const postOrganisationBodyAddressMax = 100;
-export const postOrganisationBodyRootUserPasswordMin = 6;
+export const postOrganisationBodyNameMax = 100;export const postOrganisationBodyAddressMin = 10;
+export const postOrganisationBodyAddressMax = 100;export const postOrganisationBodyRootUserPasswordMin = 6;
 
 export const postOrganisationBody = zod.object({
-	name: zod
-		.string()
-		.min(1)
-		.max(postOrganisationBodyNameMax)
-		.describe("The name of the organisation"),
-	phone: zod.string().describe("The phone number of the organisation"),
-	address: zod
-		.string()
-		.min(postOrganisationBodyAddressMin)
-		.max(postOrganisationBodyAddressMax)
-		.describe("The address of the organisation"),
-	rootUser: zod.object({
-		email: zod.email().describe("The email of the root user"),
-		password: zod
-			.string()
-			.min(postOrganisationBodyRootUserPasswordMin)
-			.describe("The password of the root user"),
-	}),
-});
+  "name": zod.string().min(1).max(postOrganisationBodyNameMax).describe('The name of the organisation'),
+  "phone": zod.string().describe('The phone number of the organisation'),
+  "address": zod.string().min(postOrganisationBodyAddressMin).max(postOrganisationBodyAddressMax).describe('The address of the organisation'),
+  "rootUser": zod.object({
+  "email": zod.email().describe('The email of the root user'),
+  "password": zod.string().min(postOrganisationBodyRootUserPasswordMin).describe('The password of the root user')
+})
+})
+
 
 /**
  * Get all instructions with their latest versions
  * @summary Get all instructions
  */
 export const getOrganisationOrganisationIdInstructionsResponse = zod.object({
-	items: zod.array(
-		zod.object({
-			id: zod.string().describe("The unique identifier of the instruction"),
-			name: zod.string().describe("The name of the instruction"),
-			description: zod.string().describe("The description of the instruction"),
-			type: zod
-				.enum(["Personality", "Procedure", "Guardian"])
-				.describe("The type of the instruction"),
-		}),
-	),
-	total: zod.number().describe("The total number of instructions"),
-});
+  "items": zod.array(zod.object({
+  "id": zod.string().describe('The unique identifier of the instruction'),
+  "name": zod.string().describe('The name of the instruction'),
+  "description": zod.string().describe('The description of the instruction'),
+  "type": zod.enum(['Personality', 'Procedure', 'Guardian']).describe('The type of the instruction')
+})),
+  "total": zod.number().describe('The total number of instructions')
+})
+
 
 /**
  * Create an instruction and its first version
  * @summary Create an instruction
  */
 export const postOrganisationOrganisationIdInstructionsParams = zod.object({
-	organisationId: zod
-		.string()
-		.describe("The unique identifier of the organisation"),
-});
+  "organisationId": zod.string().describe('The unique identifier of the organisation')
+})
 
-export const postOrganisationOrganisationIdInstructionsBodyNameMax = 100;
-export const postOrganisationOrganisationIdInstructionsBodyDescriptionMax = 1000;
-export const postOrganisationOrganisationIdInstructionsBodyContentMax = 5000;
+export const postOrganisationOrganisationIdInstructionsBodyNameMax = 100;export const postOrganisationOrganisationIdInstructionsBodyDescriptionMax = 1000;export const postOrganisationOrganisationIdInstructionsBodyContentMax = 5000;
 
 export const postOrganisationOrganisationIdInstructionsBody = zod.object({
-	name: zod
-		.string()
-		.min(1)
-		.max(postOrganisationOrganisationIdInstructionsBodyNameMax)
-		.describe("The name of the instruction"),
-	description: zod
-		.string()
-		.min(1)
-		.max(postOrganisationOrganisationIdInstructionsBodyDescriptionMax)
-		.describe("The description of the instruction"),
-	type: zod
-		.enum(["Personality", "Procedure", "Guardian"])
-		.describe("The type of the instruction"),
-	content: zod
-		.string()
-		.min(1)
-		.max(postOrganisationOrganisationIdInstructionsBodyContentMax)
-		.describe("The content of the instruction"),
-});
+  "name": zod.string().min(1).max(postOrganisationOrganisationIdInstructionsBodyNameMax).describe('The name of the instruction'),
+  "description": zod.string().min(1).max(postOrganisationOrganisationIdInstructionsBodyDescriptionMax).describe('The description of the instruction'),
+  "type": zod.enum(['Personality', 'Procedure', 'Guardian']).describe('The type of the instruction'),
+  "content": zod.string().min(1).max(postOrganisationOrganisationIdInstructionsBodyContentMax).describe('The content of the instruction')
+})
+
 
 /**
  * Get an instruction with its versions
  * @summary Get an instruction
  */
-export const getOrganisationOrganisationIdInstructionsInstructionIdParams =
-	zod.object({
-		organisationId: zod
-			.string()
-			.describe("The unique identifier of the organisation"),
-		instructionId: zod
-			.string()
-			.describe("The unique identifier of the instruction"),
-	});
+export const getOrganisationOrganisationIdInstructionsInstructionIdParams = zod.object({
+  "organisationId": zod.string().describe('The unique identifier of the organisation'),
+  "instructionId": zod.string().describe('The unique identifier of the instruction')
+})
 
-export const getOrganisationOrganisationIdInstructionsInstructionIdResponse =
-	zod.object({
-		id: zod.string().describe("The unique identifier of the instruction"),
-		name: zod.string().describe("The name of the instruction"),
-		description: zod.string().describe("The description of the instruction"),
-		type: zod
-			.enum(["Personality", "Procedure", "Guardian"])
-			.describe("The type of the instruction"),
-		versions: zod
-			.array(
-				zod.object({
-					id: zod
-						.string()
-						.describe("The unique identifier of the instruction version"),
-					version: zod.number().describe("The version of the instruction"),
-					content: zod.string().describe("The content of the instruction"),
-				}),
-			)
-			.describe("The versions of the instruction"),
-	});
+export const getOrganisationOrganisationIdInstructionsInstructionIdResponse = zod.object({
+  "id": zod.string().describe('The unique identifier of the instruction'),
+  "name": zod.string().describe('The name of the instruction'),
+  "description": zod.string().describe('The description of the instruction'),
+  "type": zod.enum(['Personality', 'Procedure', 'Guardian']).describe('The type of the instruction'),
+  "versions": zod.array(zod.object({
+  "id": zod.string().describe('The unique identifier of the instruction version'),
+  "version": zod.number().describe('The version of the instruction'),
+  "content": zod.string().describe('The content of the instruction')
+})).describe('The versions of the instruction')
+})
+
 
 /**
  * Update an instruction
  * @summary Update an instruction
  */
-export const putOrganisationOrganisationIdInstructionsInstructionIdParams =
-	zod.object({
-		organisationId: zod
-			.string()
-			.describe("The unique identifier of the organisation"),
-		instructionId: zod
-			.string()
-			.describe("The unique identifier of the instruction"),
-	});
+export const putOrganisationOrganisationIdInstructionsInstructionIdParams = zod.object({
+  "organisationId": zod.string().describe('The unique identifier of the organisation'),
+  "instructionId": zod.string().describe('The unique identifier of the instruction')
+})
 
-export const putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax = 100;
-export const putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax = 1000;
-export const putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax = 5000;
+export const putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax = 100;export const putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax = 1000;export const putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax = 5000;
 
-export const putOrganisationOrganisationIdInstructionsInstructionIdBody =
-	zod.object({
-		name: zod
-			.string()
-			.min(1)
-			.max(putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax)
-			.optional()
-			.describe("The name of the instruction"),
-		description: zod
-			.string()
-			.min(1)
-			.max(
-				putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax,
-			)
-			.optional()
-			.describe("The description of the instruction"),
-		content: zod
-			.string()
-			.min(1)
-			.max(putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax)
-			.optional()
-			.describe("The content of the instruction"),
-	});
+export const putOrganisationOrganisationIdInstructionsInstructionIdBody = zod.object({
+  "name": zod.string().min(1).max(putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax).optional().describe('The name of the instruction'),
+  "description": zod.string().min(1).max(putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax).optional().describe('The description of the instruction'),
+  "content": zod.string().min(1).max(putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax).optional().describe('The content of the instruction')
+}).refine(data => Object.keys(data).length > 0, {
+  message: "At least one property must be provided",
+});
 
-export const putOrganisationOrganisationIdInstructionsInstructionIdResponse =
-	zod
-		.object({
-			id: zod.string().describe("The unique identifier of the instruction"),
-			name: zod.string().describe("The name of the instruction"),
-			description: zod.string().describe("The description of the instruction"),
-			type: zod
-				.enum(["Personality", "Procedure", "Guardian"])
-				.describe("The type of the instruction"),
-		})
-		.and(
-			zod.object({
-				latestVersion: zod.object({
-					id: zod
-						.string()
-						.describe("The unique identifier of the instruction version"),
-					version: zod.number().describe("The version of the instruction"),
-					content: zod.string().describe("The content of the instruction"),
-				}),
-			}),
-		);
+export const putOrganisationOrganisationIdInstructionsInstructionIdResponse = zod.object({
+  "id": zod.string().describe('The unique identifier of the instruction'),
+  "name": zod.string().describe('The name of the instruction'),
+  "description": zod.string().describe('The description of the instruction'),
+  "type": zod.enum(['Personality', 'Procedure', 'Guardian']).describe('The type of the instruction')
+}).and(zod.object({
+  "latestVersion": zod.object({
+  "id": zod.string().describe('The unique identifier of the instruction version'),
+  "version": zod.number().describe('The version of the instruction'),
+  "content": zod.string().describe('The content of the instruction')
+})
+}))
+
+

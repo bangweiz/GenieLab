@@ -5,27 +5,27 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateInstructionRequestType } from "./createInstructionRequestType";
+import type { CreateInstructionRequestType } from './createInstructionRequestType';
 
 export interface CreateInstructionRequest {
-	/**
-	 * The name of the instruction
-	 * @minLength 1
-	 * @maxLength 100
-	 */
-	name: string;
-	/**
-	 * The description of the instruction
-	 * @minLength 1
-	 * @maxLength 1000
-	 */
-	description: string;
-	/** The type of the instruction */
-	type: CreateInstructionRequestType;
-	/**
-	 * The content of the instruction
-	 * @minLength 1
-	 * @maxLength 5000
-	 */
-	content: string;
+  /**
+   * The name of the instruction
+   * @minLength 1
+   * @maxLength 100
+   */
+  name: string;
+  /**
+   * The description of the instruction
+   * @minLength 1
+   * @maxLength 1000
+   */
+  description: string;
+  /** The type of the instruction */
+  type: CreateInstructionRequestType;
+  /**
+   * The content of the instruction
+   * @minLength 1
+   * @maxLength 5000
+   */
+  content: string;
 }

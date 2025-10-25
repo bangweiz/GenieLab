@@ -267,7 +267,9 @@ components:
           description: The content of the instruction
           example: Generate a python script that generates a random number
     UpdateInstructionRequest:
+      x-kebab-case-name: update-instruction-request
       type: object
+      minProperties: 1
       properties:
         name:
           type: string
