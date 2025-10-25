@@ -9,12 +9,12 @@
 /**
  * The type of the instruction
  */
-export type CreateInstructionRequestType = typeof CreateInstructionRequestType[keyof typeof CreateInstructionRequestType];
-
+export type CreateInstructionRequestType =
+	(typeof CreateInstructionRequestType)[keyof typeof CreateInstructionRequestType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateInstructionRequestType = {
-  Personality: 'Personality',
-  Procedure: 'Procedure',
-  Guardian: 'Guardian',
+	Personality: "Personality",
+	Procedure: "Procedure",
+	Guardian: "Guardian",
 } as const;

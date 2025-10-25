@@ -7,12 +7,12 @@
  */
 
 export interface OrganisationResponse {
-  /** The unique identifier of the organisation */
-  id: string;
-  /** The name of the organisation */
-  name: string;
-  /** The phone number of the organisation */
-  phone: string;
-  /** The address of the organisation */
-  address: string;
+	/** The unique identifier of the organisation */
+	id: string;
+	/** The name of the organisation */
+	name: string;
+	/** The phone number of the organisation */
+	phone: string;
+	/** The address of the organisation */
+	address: string;
 }

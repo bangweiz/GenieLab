@@ -7,11 +7,11 @@
  */
 
 export interface LoginRequest {
-  /** The email of the root user */
-  email: string;
-  /**
-   * The password of the root user
-   * @minLength 6
-   */
-  password: string;
+	/** The email of the root user */
+	email: string;
+	/**
+	 * The password of the root user
+	 * @minLength 6
+	 */
+	password: string;
 }

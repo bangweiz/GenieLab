@@ -7,8 +7,8 @@
  */
 
 export interface LoginResponse {
-  /** The JWT token */
-  token: string;
-  /** The expiration date of the JWT token */
-  expiration: string;
+	/** The JWT token */
+	token: string;
+	/** The expiration date of the JWT token */
+	expiration: string;
 }

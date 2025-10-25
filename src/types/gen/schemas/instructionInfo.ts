@@ -5,15 +5,15 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import type { InstructionInfoType } from './instructionInfoType';
+import type { InstructionInfoType } from "./instructionInfoType";
 
 export interface InstructionInfo {
-  /** The unique identifier of the instruction */
-  id: string;
-  /** The name of the instruction */
-  name: string;
-  /** The description of the instruction */
-  description: string;
-  /** The type of the instruction */
-  type: InstructionInfoType;
+	/** The unique identifier of the instruction */
+	id: string;
+	/** The name of the instruction */
+	name: string;
+	/** The description of the instruction */
+	description: string;
+	/** The type of the instruction */
+	type: InstructionInfoType;
 }

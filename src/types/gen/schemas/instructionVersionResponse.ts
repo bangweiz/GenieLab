@@ -7,10 +7,10 @@
  */
 
 export interface InstructionVersionResponse {
-  /** The unique identifier of the instruction version */
-  id: string;
-  /** The version of the instruction */
-  version: number;
-  /** The content of the instruction */
-  content: string;
+	/** The unique identifier of the instruction version */
+	id: string;
+	/** The version of the instruction */
+	version: number;
+	/** The content of the instruction */
+	content: string;
 }
