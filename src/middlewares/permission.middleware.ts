@@ -1,12 +1,9 @@
 import { HTTPException } from "hono/http-exception";
 import { Role } from "../constants/auth";
-import { MiddlewareHandler } from "hono";
-import { App } from "../types/app";
+import { Context, Next } from "hono";
 
-const permissionMiddleware = (
-	requiredRole: Role,
-): MiddlewareHandler<App["Variables"]> => {
-	return async (c, next) => {
+function permissionMiddleware(requiredRole: Role) {
+	return async (c: Context, next: Next) => {
 		const user = c.get("user");
 		if (!user) {
 			throw new HTTPException(401, { message: "Unauthorized" });
@@ -19,22 +16,19 @@ const permissionMiddleware = (
 
 		await next();
 	};
-};
+}
 
 const checkPermission = (userRole: Role, requiredRole: Role): boolean => {
-	if (userRole === Role.Root) {
-		return true;
+	switch (requiredRole) {
+		case Role.Root:
+			return userRole === Role.Root;
+		case Role.Admin:
+			return userRole === Role.Root || userRole === Role.Admin;
+		case Role.User:
+			return true;
+		default:
+			return false;
 	}
-	if (requiredRole === Role.Admin && userRole === Role.Admin) {
-		return true;
-	}
-	if (
-		requiredRole === Role.User &&
-		(userRole === Role.Admin || userRole === Role.User)
-	) {
-		return true;
-	}
-	return false;
 };
 
 export default permissionMiddleware;

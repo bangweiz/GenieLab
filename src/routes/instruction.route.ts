@@ -6,13 +6,12 @@ import * as instructionService from "../services/instruction.service";
 import transactionMiddleware, {
 	SessionVariable,
 } from "../middlewares/transaction";
-import authMiddleware from "../middlewares/auth.middleware";
+import authMiddleware, { AuthVariable } from "../middlewares/auth.middleware";
 import permissionMiddleware from "../middlewares/permission.middleware";
 import { Role } from "../constants/auth";
-import { App } from "../types/app";
 
 const instructionRoute = new Hono<{
-	Variables: App["Variables"] & SessionVariable;
+	Variables: AuthVariable & SessionVariable;
 }>();
 
 instructionRoute.post(

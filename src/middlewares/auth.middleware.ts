@@ -1,12 +1,9 @@
 import { HTTPException } from "hono/http-exception";
-import { jwtVerify } from "jose";
 import { Role } from "../constants/auth";
-import { MiddlewareHandler } from "hono";
-import { App } from "../types/app";
+import { Context, Next } from "hono";
+import { verifyToken } from "../utils/auth.utils";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "secret");
-
-const authMiddleware: MiddlewareHandler<App["Variables"]> = async (c, next) => {
+async function authMiddleware(c: Context, next: Next) {
 	const authHeader = c.req.header("Authorization");
 	if (!authHeader || !authHeader.startsWith("Bearer ")) {
 		throw new HTTPException(401, { message: "Unauthorized" });
@@ -18,19 +15,31 @@ const authMiddleware: MiddlewareHandler<App["Variables"]> = async (c, next) => {
 	}
 
 	try {
-		const { payload } = await jwtVerify(token, JWT_SECRET);
+		const { payload } = await verifyToken(token);
+
 		if (!payload) {
 			throw new HTTPException(401, { message: "Unauthorized" });
 		}
 		c.set("user", {
-			id: payload.userId as string,
-			role: payload.role as Role,
+			email: payload.email,
+			role: payload.role,
+			organisationId: payload.organisationId,
+			userId: payload.userId,
 		});
 	} catch (e) {
 		throw new HTTPException(401, { message: "Unauthorized" });
 	}
 
 	await next();
+}
+
+export type AuthVariable = {
+	user: {
+		email: string;
+		role: Role;
+		organisationId: string;
+		userId: string;
+	};
 };
 
 export default authMiddleware;
