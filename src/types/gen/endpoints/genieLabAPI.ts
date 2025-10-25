@@ -61,29 +61,16 @@ export const postOrganisationBody = zod.object({
  * @summary Get all instructions
  */
 export const getOrganisationOrganisationIdInstructionsResponse = zod.object({
-	items: zod
-		.array(
-			zod.object({
-				id: zod.string().describe("The unique identifier of the instruction"),
-				name: zod.string().describe("The name of the instruction"),
-				description: zod
-					.string()
-					.describe("The description of the instruction"),
-				type: zod
-					.enum(["Personality", "Procedure", "Guardian"])
-					.describe("The type of the instruction"),
-				latestVersion: zod
-					.object({
-						id: zod
-							.string()
-							.describe("The unique identifier of the instruction version"),
-						version: zod.number().describe("The version of the instruction"),
-						content: zod.string().describe("The content of the instruction"),
-					})
-					.optional(),
-			}),
-		)
-		.describe("The list of instructions"),
+	items: zod.array(
+		zod.object({
+			id: zod.string().describe("The unique identifier of the instruction"),
+			name: zod.string().describe("The name of the instruction"),
+			description: zod.string().describe("The description of the instruction"),
+			type: zod
+				.enum(["Personality", "Procedure", "Guardian"])
+				.describe("The type of the instruction"),
+		}),
+	),
 	total: zod.number().describe("The total number of instructions"),
 });
 
@@ -144,15 +131,17 @@ export const getOrganisationOrganisationIdInstructionsInstructionIdResponse =
 		type: zod
 			.enum(["Personality", "Procedure", "Guardian"])
 			.describe("The type of the instruction"),
-		latestVersion: zod
-			.object({
-				id: zod
-					.string()
-					.describe("The unique identifier of the instruction version"),
-				version: zod.number().describe("The version of the instruction"),
-				content: zod.string().describe("The content of the instruction"),
-			})
-			.optional(),
+		versions: zod
+			.array(
+				zod.object({
+					id: zod
+						.string()
+						.describe("The unique identifier of the instruction version"),
+					version: zod.number().describe("The version of the instruction"),
+					content: zod.string().describe("The content of the instruction"),
+				}),
+			)
+			.describe("The versions of the instruction"),
 	});
 
 /**
@@ -198,20 +187,23 @@ export const putOrganisationOrganisationIdInstructionsInstructionIdBody =
 	});
 
 export const putOrganisationOrganisationIdInstructionsInstructionIdResponse =
-	zod.object({
-		id: zod.string().describe("The unique identifier of the instruction"),
-		name: zod.string().describe("The name of the instruction"),
-		description: zod.string().describe("The description of the instruction"),
-		type: zod
-			.enum(["Personality", "Procedure", "Guardian"])
-			.describe("The type of the instruction"),
-		latestVersion: zod
-			.object({
-				id: zod
-					.string()
-					.describe("The unique identifier of the instruction version"),
-				version: zod.number().describe("The version of the instruction"),
-				content: zod.string().describe("The content of the instruction"),
-			})
-			.optional(),
-	});
+	zod
+		.object({
+			id: zod.string().describe("The unique identifier of the instruction"),
+			name: zod.string().describe("The name of the instruction"),
+			description: zod.string().describe("The description of the instruction"),
+			type: zod
+				.enum(["Personality", "Procedure", "Guardian"])
+				.describe("The type of the instruction"),
+		})
+		.and(
+			zod.object({
+				latestVersion: zod.object({
+					id: zod
+						.string()
+						.describe("The unique identifier of the instruction version"),
+					version: zod.number().describe("The version of the instruction"),
+					content: zod.string().describe("The content of the instruction"),
+				}),
+			}),
+		);

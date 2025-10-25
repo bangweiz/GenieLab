@@ -58,7 +58,8 @@ instructionRoute.get(
 	permissionMiddleware(Role.Admin),
 	async (c) => {
 		const organisationId = c.req.param("organisationId");
-		const instructions = await instructionService.getInstructions(organisationId);
+		const instructions =
+			await instructionService.getInstructions(organisationId);
 		return c.json(instructions);
 	},
 );

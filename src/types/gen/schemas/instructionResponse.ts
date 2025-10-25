@@ -5,17 +5,7 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import type { InstructionResponseType } from "./instructionResponseType";
-import type { InstructionVersionResponse } from "./instructionVersionResponse";
+import type { InstructionInfo } from "./instructionInfo";
+import type { InstructionResponseAllOf } from "./instructionResponseAllOf";
 
-export interface InstructionResponse {
-	/** The unique identifier of the instruction */
-	id: string;
-	/** The name of the instruction */
-	name: string;
-	/** The description of the instruction */
-	description: string;
-	/** The type of the instruction */
-	type: InstructionResponseType;
-	latestVersion?: InstructionVersionResponse;
-}
+export type InstructionResponse = InstructionInfo & InstructionResponseAllOf;

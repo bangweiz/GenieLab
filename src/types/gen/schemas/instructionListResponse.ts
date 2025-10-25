@@ -5,11 +5,10 @@
  * A simple, minimal API for managing an ai agent.
  * OpenAPI spec version: 1.0.0
  */
-import type { InstructionResponse } from "./instructionResponse";
+import type { InstructionInfo } from "./instructionInfo";
 
 export interface InstructionListResponse {
-	/** The list of instructions */
-	items: InstructionResponse[];
+	items: InstructionInfo[];
 	/** The total number of instructions */
 	total: number;
 }
