@@ -1,4 +1,6 @@
-Before applying any changes, please run `bun get-types` to generate the latest types. 
+When implementing or refactoring endpoints, always read `swagger/openapi.yaml` file, and follow the description of each endpoint.
+
+Before applying any changes, please run `bun get-types` to generate the latest types.
 If you need types, try to find the type in the `src/types/gen/endpoints` and `src/types/gen/schemas` directory.
 
 Before committing ant changes, please run `bun lint` to format the code.
