@@ -7,9 +7,84 @@ import {
 	InstructionDetailResponse,
 	InstructionListResponse,
 	InstructionInfo,
+	UpdateInstructionRequest,
 } from "../types/gen/schemas";
 import { CreateInstructionRequest } from "../types/gen/schemas";
 import mongoose from "mongoose";
+
+export async function updateInstruction(
+	instructionId: string,
+	organisationId: string,
+	instructionData: UpdateInstructionRequest,
+	session: mongoose.mongo.ClientSession | null,
+): Promise<InstructionResponse> {
+	const instruction = await Instruction.findOne({
+		_id: instructionId,
+		organisation: organisationId,
+	}).session(session);
+
+	if (!instruction) {
+		throw new HTTPException(404, { message: "Not Found" });
+	}
+
+	let hasChanges = false;
+
+	if (instructionData.name && instructionData.name !== instruction.name) {
+		instruction.name = instructionData.name;
+		hasChanges = true;
+	}
+
+	if (
+		instructionData.description &&
+		instructionData.description !== instruction.description
+	) {
+		instruction.description = instructionData.description;
+		hasChanges = true;
+	}
+
+	let savedInstructionVersion = await InstructionVersion.findOne({
+		parent: instruction._id,
+		version: instruction.latestVersion,
+	}).session(session);
+
+	if (!savedInstructionVersion) {
+		throw new HTTPException(500, {
+			message: "Latest instruction version not found. Data is inconsistent.",
+		});
+	}
+
+	if (
+		instructionData.content &&
+		instructionData.content !== savedInstructionVersion.content
+	) {
+		hasChanges = true;
+		const newVersionNumber = instruction.latestVersion + 1;
+		const newInstructionVersion = new InstructionVersion({
+			content: instructionData.content,
+			version: newVersionNumber,
+			parent: instruction._id,
+		});
+		savedInstructionVersion = await newInstructionVersion.save({ session });
+		instruction.latestVersion = newVersionNumber;
+	}
+
+	let savedInstruction = instruction;
+	if (hasChanges) {
+		savedInstruction = await instruction.save({ session });
+	}
+
+	return {
+		id: savedInstruction._id.toString(),
+		name: savedInstruction.name,
+		description: savedInstruction.description,
+		type: savedInstruction.type,
+		latestVersion: {
+			id: savedInstructionVersion._id.toString(),
+			content: savedInstructionVersion.content,
+			version: savedInstructionVersion.version,
+		},
+	};
+}
 
 export async function createInstruction(
 	instruction: CreateInstructionRequest,
