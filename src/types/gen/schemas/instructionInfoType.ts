@@ -9,11 +9,11 @@
 /**
  * The type of the instruction
  */
-export type InstructionResponseType =
-	(typeof InstructionResponseType)[keyof typeof InstructionResponseType];
+export type InstructionInfoType =
+	(typeof InstructionInfoType)[keyof typeof InstructionInfoType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const InstructionResponseType = {
+export const InstructionInfoType = {
 	Personality: "Personality",
 	Procedure: "Procedure",
 	Guardian: "Guardian",

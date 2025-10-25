@@ -287,7 +287,7 @@ components:
           maxLength: 5000
           description: The content of the instruction
           example: Generate a python script that generates a random number
-    InstructionResponse:
+    instructionInfo:
       type: object
       required:
         - id
@@ -315,8 +315,15 @@ components:
             - Guardian
           description: The type of the instruction
           example: Procedure
-        latestVersion:
-          $ref: '#/components/schemas/InstructionVersionResponse'
+    InstructionResponse:
+      allOf:
+        - $ref: '#/components/schemas/instructionInfo'
+        - type: object
+          required:
+            - latestVersion
+          properties:
+            latestVersion:
+              $ref: '#/components/schemas/InstructionVersionResponse'
     InstructionListResponse:
       type: object
       required:
@@ -326,8 +333,8 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/InstructionResponse'
-          description: The list of instructions
+            allOf:
+              - $ref: '#/components/schemas/instructionInfo'
         total:
           type: integer
           description: The total number of instructions

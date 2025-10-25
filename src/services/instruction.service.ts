@@ -5,6 +5,8 @@ import InstructionVersion from "../schemas/instructionVersion.schema";
 import {
 	InstructionResponse,
 	InstructionDetailResponse,
+	InstructionListResponse,
+	InstructionInfo,
 } from "../types/gen/schemas";
 import { CreateInstructionRequest } from "../types/gen/schemas";
 import mongoose from "mongoose";
@@ -85,3 +87,23 @@ export async function getInstruction(
 		})),
 	};
 }
+
+export const getInstructions = async (
+	organisationId: string,
+): Promise<InstructionListResponse> => {
+	const instructions = await Instruction.find({ organisation: organisationId });
+
+	const result: InstructionListResponse = {
+		items: instructions.map(
+			(instruction): InstructionInfo => ({
+				id: instruction._id.toString(),
+				name: instruction.name,
+				description: instruction.description,
+				type: instruction.type,
+			}),
+		),
+		total: instructions.length,
+	};
+
+	return result;
+};
