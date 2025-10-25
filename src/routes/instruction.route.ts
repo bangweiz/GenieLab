@@ -6,13 +6,18 @@ import * as instructionService from "../services/instruction.service";
 import transactionMiddleware, {
 	SessionVariable,
 } from "../middlewares/transaction";
+import authMiddleware, { AuthVariable } from "../middlewares/auth.middleware";
+import permissionMiddleware from "../middlewares/permission.middleware";
+import { Role } from "../constants/auth";
 
 const instructionRoute = new Hono<{
-	Variables: SessionVariable;
+	Variables: AuthVariable & SessionVariable;
 }>();
 
 instructionRoute.post(
 	"/organisations/:organisationId/instructions",
+	authMiddleware,
+	permissionMiddleware(Role.Admin),
 	zValidator("json", postOrganisationOrganisationIdInstructionsBody),
 	transactionMiddleware,
 	async (c) => {
@@ -32,6 +37,8 @@ instructionRoute.post(
 
 instructionRoute.get(
 	"/organisations/:organisationId/instructions/:instructionId",
+	authMiddleware,
+	permissionMiddleware(Role.User),
 	async (c) => {
 		const organisationId = c.req.param("organisationId");
 		const instructionId = c.req.param("instructionId");
