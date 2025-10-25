@@ -5,6 +5,7 @@ import InstructionVersion from "../schemas/instructionVersion.schema";
 import {
 	InstructionResponse,
 	InstructionDetailResponse,
+	InstructionListResponse,
 } from "../types/gen/schemas";
 import { CreateInstructionRequest } from "../types/gen/schemas";
 import mongoose from "mongoose";
@@ -85,3 +86,35 @@ export async function getInstruction(
 		})),
 	};
 }
+
+export const getInstructions = async (organisationId: string): Promise<InstructionListResponse> => {
+  const instructions = await Instruction.find({ organisation: organisationId });
+
+  const instructionIds = instructions.map(instruction => instruction._id);
+
+  const latestVersions = await InstructionVersion.aggregate([
+    { $match: { parent: { $in: instructionIds } } },
+    { $sort: { version: -1 } },
+    { $group: { _id: "$parent", latestVersion: { $first: "$$ROOT" } } }
+  ]);
+
+  const latestVersionsMap = new Map(latestVersions.map(version => [version._id.toString(), version.latestVersion]));
+
+  return {
+    items: instructions.map(instruction => {
+      const latestVersion = latestVersionsMap.get(instruction._id.toString());
+      return {
+        id: instruction._id.toString(),
+        name: instruction.name,
+        description: instruction.description,
+        type: instruction.type,
+        latestVersion: latestVersion ? {
+          id: latestVersion._id.toString(),
+          version: latestVersion.version,
+          content: latestVersion.content,
+        } : undefined,
+      };
+    }),
+    total: instructions.length,
+  };
+};

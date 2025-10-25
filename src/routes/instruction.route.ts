@@ -52,4 +52,15 @@ instructionRoute.get(
 	},
 );
 
+instructionRoute.get(
+	"/organisations/:organisationId/instructions",
+	authMiddleware,
+	permissionMiddleware(Role.Admin),
+	async (c) => {
+		const organisationId = c.req.param("organisationId");
+		const instructions = await instructionService.getInstructions(organisationId);
+		return c.json(instructions);
+	},
+);
+
 export default instructionRoute;
