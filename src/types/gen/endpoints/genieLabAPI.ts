@@ -162,8 +162,8 @@ export const putOrganisationOrganisationIdInstructionsInstructionIdBodyNameMax =
 export const putOrganisationOrganisationIdInstructionsInstructionIdBodyDescriptionMax = 1000;
 export const putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax = 5000;
 
-export const putOrganisationOrganisationIdInstructionsInstructionIdBody =
-	zod.object({
+export const putOrganisationOrganisationIdInstructionsInstructionIdBody = zod
+	.object({
 		name: zod
 			.string()
 			.min(1)
@@ -184,6 +184,9 @@ export const putOrganisationOrganisationIdInstructionsInstructionIdBody =
 			.max(putOrganisationOrganisationIdInstructionsInstructionIdBodyContentMax)
 			.optional()
 			.describe("The content of the instruction"),
+	})
+	.refine((data) => Object.keys(data).length > 0, {
+		message: "At least one property must be provided",
 	});
 
 export const putOrganisationOrganisationIdInstructionsInstructionIdResponse =

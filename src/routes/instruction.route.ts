@@ -1,7 +1,10 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 
-import { postOrganisationOrganisationIdInstructionsBody } from "../types/gen/endpoints/genieLabAPI";
+import {
+	postOrganisationOrganisationIdInstructionsBody,
+	putOrganisationOrganisationIdInstructionsInstructionIdBody,
+} from "../types/gen/endpoints/genieLabAPI";
 import * as instructionService from "../services/instruction.service";
 import transactionMiddleware, {
 	SessionVariable,
@@ -61,6 +64,32 @@ instructionRoute.get(
 		const instructions =
 			await instructionService.getInstructions(organisationId);
 		return c.json(instructions);
+	},
+);
+
+instructionRoute.put(
+	"/organisations/:organisationId/instructions/:instructionId",
+	authMiddleware,
+	permissionMiddleware(Role.Admin),
+	zValidator(
+		"json",
+		putOrganisationOrganisationIdInstructionsInstructionIdBody,
+	),
+	transactionMiddleware,
+	async (c) => {
+		const organisationId = c.req.param("organisationId");
+		const instructionId = c.req.param("instructionId");
+		const instructionData = c.req.valid("json");
+		const session = c.get("session");
+
+		const updatedInstruction = await instructionService.updateInstruction(
+			instructionId,
+			organisationId,
+			instructionData,
+			session,
+		);
+
+		return c.json(updatedInstruction);
 	},
 );
 
