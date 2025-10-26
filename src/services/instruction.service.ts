@@ -18,10 +18,8 @@ export async function updateInstruction(
 	session: mongoose.mongo.ClientSession | null,
 ): Promise<InstructionResponse> {
 	// Find the initial instruction state
-	const instruction = await Instruction.findOne({
-		_id: instructionId,
-		organisation: organisationId,
-	}).session(session);
+	const instruction =
+		await Instruction.findById(instructionId).session(session);
 
 	if (!instruction) {
 		throw new HTTPException(404, { message: "Not Found" });
